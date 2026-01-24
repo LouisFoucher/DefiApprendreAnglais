@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Défi Anglais 30 Jours</title>
+<style>
+body{font-family:Arial, sans-serif;background:#0f172a;color:#e5e7eb;margin:0;padding:0}
+header{background:#020617;padding:20px;text-align:center}
+section{padding:20px}
+.day{background:#020617;margin-bottom:15px;padding:15px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,0.4)}
+button{padding:10px 15px;border:none;border-radius:8px;background:#22c55e;color:#000;font-weight:bold;cursor:pointer}
+small{color:#94a3b8}
+a{color:#38bdf8}
+</style>
+</head>
+<body>
+<header>
+<h1>Défi Anglais 30 Jours 🇬🇧</h1>
+<p>Progressif • Gratuit • Flexible • Jour par jour</p>
+<button onclick="nextDay()">Jour suivant</button>
+</header>
+<section id="container"></section>
+<script>
+let day=0;
+const days = [
+// --- SEMAINE 1 ---
+{title:"Jour 1",content:`⏱ Duolingo : 5 min<br>📺 YouTube : <a href="https://www.youtube.com/@bbclearningenglish" target="_blank">BBC Learning English</a><br>🗣 Phrase : "I am learning English."<br>📚 Mots : learn, work, try, want, English`},
+{title:"Jour 2",content:`⏱ Duolingo : 5 min<br>📺 YouTube : <a href="https://www.youtube.com/@EasyEnglish" target="_blank">Easy English</a><br>🗣 Phrase : "I work today."<br>📚 Mots : today, job, company, tired, day`},
+{title:"Jour 3",content:`⏱ Duolingo : 5 min<br>📺 YouTube : <a href="https://www.youtube.com/@EnglishAddict" target="_blank">English Addict</a><br>🗣 Phrase : "It’s difficult but I try."<br>📚 Mots : difficult, easy, try, again, better`},
+{title:"Jour 4",content:`⏱ Duolingo : 5 min<br>📺 YouTube : <a href="https://www.youtube.com/@SpeakEnglishWithMrDuncan" target="_blank">MrDuncan</a><br>🗣 Phrase : "I want to improve my English."<br>📚 Mots : improve, speak, understand, learn, more`},
+{title:"Jour 5",content:`⏱ Duolingo : 5 min<br>📺 YouTube : <a href="https://www.youtube.com/@rachelsenglish" target="_blank">Rachel’s English</a><br>🗣 Phrase : "My pronunciation is not good but I learn."<br>📚 Mots : sound, word, mouth, accent, speak`},
+{title:"Jour 6",content:`⏱ Duolingo : 7 min<br>📺 YouTube : BBC Learning English<br>🗣 Phrases : "I am tired." / "I continue."<br>📚 Mots : tired, energy, continue, rest, focus`},
+{title:"Jour 7",content:`🧠 Light day<br>📺 1 vidéo libre<br>🗣 1 phrase libre<br><small>Objectif : habitude</small>`},
+// --- SEMAINE 2 ---
+{title:"Jour 8",content:`⏱ Duolingo : 8 min<br>📺 Easy English<br>🗣 Phrase : "I learn every day."<br>📚 Mots : everyday, practice, habit, progress, goal`},
+{title:"Jour 9",content:`⏱ Duolingo : 8 min<br>📺 BBC Learning English<br>🗣 Phrase : "I want to progress."<br>📚 Mots : progress, future, plan, change, improve`},
+{title:"Jour 10",content:`⏱ Duolingo : 10 min<br>📺 English Addict<br>🗣 Phrase : "I understand more."<br>📚 Mots : understand, more, less, slow, fast`},
+{title:"Jour 11",content:`⏱ Duolingo : 10 min<br>📺 Easy English<br>🗣 Phrase : "I try to speak."<br>📚 Mots : speak, voice, sound, sentence, word`},
+{title:"Jour 12",content:`⏱ Duolingo : 10 min<br>📺 Rachel’s English<br>🗣 Phrase : "My accent is improving."<br>📚 Mots : accent, pronunciation, mouth, sound, clear`},
+{title:"Jour 13",content:`⏱ Duolingo : 12 min<br>📺 BBC Learning English<br>🗣 3 phrases libres<br>📚 Mots : think, feel, believe, know, try`},
+{title:"Jour 14",content:`🧠 Light day<br>📺 1 vidéo<br>🗣 1 phrase<br><small>Repos mental</small>`},
+// --- SEMAINE 3 ---
+{title:"Jour 15",content:`⏱ Duolingo : 12 min<br>📺 Easy English<br>🗣 Phrase : "I can speak a little."<br>📚 Mots : little, more, better, confident, calm`},
+{title:"Jour 16",content:`⏱ Duolingo : 15 min<br>📺 BBC Learning English<br>🗣 Phrase : "I am more confident."<br>📚 Mots : confident, courage, try, effort, success`},
+{title:"Jour 17",content:`⏱ Duolingo : 15 min<br>📺 English Addict<br>🗣 3 phrases perso<br>📚 Mots : story, life, work, dream, goal`},
+{title:"Jour 18",content:`⏱ Duolingo : 15 min<br>📺 Easy English<br>🗣 Phrase : "I express myself."<br>📚 Mots : express, explain, describe, talk, share`},
+{title:"Jour 19",content:`⏱ Duolingo : 15 min<br>📺 Rachel’s English<br>🗣 Phrase : "My English is better."<br>📚 Mots : better, stronger, stable, clear, fluent`},
+{title:"Jour 20",content:`⏱ Duolingo : 15 min<br>📺 BBC Learning English<br>🗣 5 phrases libres<br>📚 Mots : connect, understand, answer, question, speak`},
+{title:"Jour 21",content:`🧠 Light day<br>📺 1 vidéo<br>🗣 1 phrase<br><small>Repos mental</small>`},
+// --- SEMAINE 4 ---
+{title:"Jour 22",content:`⏱ Duolingo : 20 min<br>📺 Easy English<br>🗣 Phrase : "I speak more easily."<br>📚 Mots : easy, flow, natural, smooth, calm`},
+{title:"Jour 23",content:`⏱ Duolingo : 20 min<br>📺 BBC Learning English<br>🗣 Phrase : "I understand conversations."<br>📚 Mots : conversation, discussion, talk, exchange, share`},
+{title:"Jour 24",content:`⏱ Duolingo : 20 min<br>📺 English Addict<br>🗣 5 phrases perso<br>📚 Mots : opinion, idea, think, believe, view`},
+{title:"Jour 25",content:`⏱ Duolingo : 20 min<br>📺 Easy English<br>🗣 Phrase : "I am not afraid to speak."<br>📚 Mots : fear, courage, confidence, calm, control`},
+{title:"Jour 26",content:`⏱ Duolingo : 20 min<br>📺 Rachel’s English<br>🗣 Phrase : "My English is clearer."<br>📚 Mots : clear, clean, sound, voice, word`},
+{title:"Jour 27",content:`⏱ Duolingo : 25 min<br>📺 BBC Learning English<br>🗣 5 phrases perso<br>📚 Mots : fluent, smooth, natural, stable, strong`},
+{title:"Jour 28",content:`⏱ Duolingo : 25 min<br>📺 Easy English<br>🗣 Mini monologue 2 min<br>📚 Mots : story, explain, describe, detail, example`},
+{title:"Jour 29",content:`⏱ Duolingo : 30 min<br>📺 Vidéo libre<br>🗣 Mini discours perso<br>📚 Révision générale`},
+{title:"Jour 30",content:`🏆 FINAL DAY<br>⏱ Duolingo : 30 min<br>📺 Vidéo anglaise libre<br>🗣 Parler 5 min<br>🎯 Objectif : confiance + fluidité<br><small>Défi terminé 🎉</small>`}
+];
+function render(){
+ const container=document.getElementById('container');
+ container.innerHTML='';
+ if(day<days.length){
+ const d=days[day];
+ const div=document.createElement('div');
+ div.className='day';
+ div.innerHTML=`<h2>${d.title}</h2><p>${d.content}</p><small>Jour ${day+1} / 30</small>`;
+ container.appendChild(div);
+ } else {
+ container.innerHTML='<h2>Défi terminé 🎉 Continue avec le même système !</h2>';
+ }
+}
+function nextDay(){day++;render();}
+render();
+</script>
+</body>
+</html>
