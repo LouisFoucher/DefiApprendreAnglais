@@ -3,632 +3,630 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Défi Anglais 30 Jours</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>English App</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,900;1,300;1,600&family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080c14;
-    --surface: #0f1623;
-    --surface2: #151e2e;
-    --accent: #4ade80;
-    --accent2: #38bdf8;
-    --accent3: #a78bfa;
-    --text: #e8edf5;
-    --muted: #5a6a82;
-    --border: rgba(255,255,255,0.06);
-  }
+/* ── RESET & BASE ── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+/* ══════════════════════════════════════
+   APP SWITCHER — sits above everything
+══════════════════════════════════════ */
+.app-switcher {
+  position: sticky; top: 0; z-index: 300;
+  display: flex;
+  background: #0e0e0e;
+  padding: 0;
+  max-width: 100%;
+}
+.app-switcher-inner {
+  max-width: 480px; margin: 0 auto; width: 100%;
+  display: flex;
+  padding: 10px 16px 0;
+  gap: 4px;
+}
+.app-btn {
+  flex: 1;
+  padding: 10px 12px 12px;
+  border: none; background: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: .5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+  white-space: nowrap;
+}
+.app-btn.active-toeic  { color: #f8f7f4; border-bottom-color: #f8f7f4; }
+.app-btn.active-defi   { color: #4ade80; border-bottom-color: #4ade80; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* ══════════════════════════════════════
+   PANELS
+══════════════════════════════════════ */
+.panel { display: none; }
+.panel.visible { display: block; }
 
-  /* Ambient background */
-  body::before {
-    content: '';
-    position: fixed;
-    top: -30%;
-    left: -20%;
-    width: 70vw;
-    height: 70vw;
-    background: radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: -20%;
-    right: -20%;
-    width: 60vw;
-    height: 60vw;
-    background: radial-gradient(circle, rgba(56,189,248,0.05) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+/* ══════════════════════════════════════
+   ── TOEIC PANEL ──
+══════════════════════════════════════ */
+#panel-toeic {
+  background: #f8f7f4;
+  color: #0e0e0e;
+  min-height: calc(100vh - 44px);
+}
 
-  /* ── HEADER ── */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(8,12,20,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px 14px;
-  }
+/* toeic vars scoped via class */
+#panel-toeic {
+  --bg:#f8f7f4; --white:#ffffff; --ink:#0e0e0e; --ink2:#737373; --ink3:#b8b8b8;
+  --border:#e4e4e0; --ok:#1a7a4a; --bad:#c0392b; --warn:#b8860b;
+}
 
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
+#panel-toeic header {
+  position: sticky; top: 44px; z-index: 200;
+  background: rgba(248,247,244,.95);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid #e4e4e0;
+}
+.t-hdr-row {
+  max-width: 480px; margin: 0 auto;
+  padding: 14px 20px 0;
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.t-logo { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 900; letter-spacing: -.4px; color: #0e0e0e; }
+.t-logo span { font-style: italic; font-weight: 300; }
+.t-xp { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 600; color: #737373; }
+.t-xp em { font-style: normal; color: #0e0e0e; font-weight: 900; }
+.t-tabs-wrap { max-width: 480px; margin: 0 auto; padding: 0 20px; overflow-x: auto; scrollbar-width: none; }
+.t-tabs-wrap::-webkit-scrollbar { display: none; }
+.t-tabs { display: flex; padding-top: 10px; }
+.t-tab { padding: 8px 14px 10px; font-size: 11px; font-weight: 500; letter-spacing: .6px; text-transform: uppercase; color: #b8b8b8; border: none; background: none; cursor: pointer; border-bottom: 1.5px solid transparent; white-space: nowrap; transition: color .18s, border-color .18s; }
+.t-tab.active { color: #0e0e0e; border-bottom-color: #0e0e0e; }
 
-  .app-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+#panel-toeic main { max-width: 480px; margin: 0 auto; padding: 22px 20px 40px; }
 
-  .flag {
-    font-size: 22px;
-    line-height: 1;
-  }
+/* toeic components */
+.t-prog-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.t-prog-bar { flex: 1; height: 2px; background: #e4e4e0; border-radius: 99px; overflow: hidden; }
+.t-prog-fill { height: 100%; background: #0e0e0e; border-radius: 99px; transition: width .4s ease; }
+.t-prog-lbl { font-size: 11px; font-weight: 500; color: #737373; font-variant-numeric: tabular-nums; }
 
-  /* Progress bar */
-  .progress-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+.t-mini-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 18px; }
+.t-mstat { border: 1px solid #e4e4e0; border-radius: 10px; padding: 10px 8px; text-align: center; background: #fff; }
+.t-mstat-val { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 900; line-height: 1; margin-bottom: 2px; }
+.t-mstat-lbl { font-size: 9px; font-weight: 500; letter-spacing: .6px; text-transform: uppercase; color: #737373; }
+.tc-ok{color:#1a7a4a;} .tc-bad{color:#c0392b;} .tc-mid{color:#737373;}
 
-  .progress-bar {
-    flex: 1;
-    height: 5px;
-    background: var(--surface2);
-    border-radius: 99px;
-    overflow: hidden;
-  }
+.t-sec-label { margin-bottom: 14px; }
+.t-sec-kicker { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: #737373; margin-bottom: 3px; }
+.t-sec-name { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 900; letter-spacing: -.3px; color: #0e0e0e; }
 
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 99px;
-    transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
-  }
+.t-skeleton { background: #fff; border: 1px solid #e4e4e0; border-radius: 16px; padding: 28px 20px; }
+.t-skel-line { height: 12px; background: #e4e4e0; border-radius: 6px; margin-bottom: 10px; animation: tpulse 1.4s ease-in-out infinite; }
+.t-skel-line.w80{width:80%;} .t-skel-line.w60{width:60%;} .t-skel-line.w90{width:90%;}
+.t-skel-opt { height: 46px; background: #e4e4e0; border-radius: 10px; margin-bottom: 8px; animation: tpulse 1.4s ease-in-out infinite; }
+.t-skel-opt:nth-child(2){animation-delay:.1s;} .t-skel-opt:nth-child(3){animation-delay:.2s;} .t-skel-opt:nth-child(4){animation-delay:.3s;}
+@keyframes tpulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+.t-loading-label { font-size: 11px; color: #737373; text-align: center; margin-top: 12px; letter-spacing: .4px; }
 
-  .progress-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--muted);
-    white-space: nowrap;
-    min-width: 40px;
-    text-align: right;
-  }
+.t-q-card { background: #fff; border: 1px solid #e4e4e0; border-radius: 16px; overflow: hidden; animation: tfadeUp .26s ease; }
+@keyframes tfadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.t-q-head { padding: 13px 18px; border-bottom: 1px solid #e4e4e0; display: flex; align-items: center; justify-content: space-between; }
+.t-q-sname { font-size: 10px; font-weight: 500; letter-spacing: .8px; text-transform: uppercase; color: #737373; }
+.t-q-body { padding: 18px 18px 20px; }
 
-  /* ── MAIN ── */
-  main {
-    position: relative;
-    z-index: 1;
-    padding: 20px 16px 120px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
+.t-passage { background: #f8f7f4; border-left: 2px solid #0e0e0e; border-radius: 0 8px 8px 0; padding: 13px 15px; margin-bottom: 18px; font-size: 13px; line-height: 1.75; color: #737373; }
+.t-passage strong { color: #0e0e0e; font-weight: 600; }
 
-  /* Week label */
-  .week-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    padding: 5px 12px;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
-  }
-  .week-badge span { color: var(--accent2); }
+.t-listen-block { border: 1px solid #e4e4e0; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; background: #f8f7f4; }
+.t-listen-script { font-size: 13px; line-height: 1.7; color: #b8b8b8; font-style: italic; margin-bottom: 12px; }
+.t-listen-script.shown { color: #737373; font-style: normal; }
+.t-listen-row { display: flex; align-items: center; gap: 10px; }
+.t-btn-listen { padding: 8px 14px; border: 1.5px solid #0e0e0e; border-radius: 7px; background: none; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; color: #0e0e0e; cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
+.t-btn-listen.playing { background: #0e0e0e; color: #fff; }
+.t-listen-ctx { font-size: 11px; color: #737373; flex: 1; }
+.t-btn-script { font-size: 11px; font-weight: 500; color: #737373; background: none; border: none; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
 
-  /* Day card */
-  .day-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    overflow: hidden;
-    animation: slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  }
+.t-q-text { font-size: 15px; font-weight: 400; line-height: 1.65; color: #0e0e0e; margin-bottom: 16px; }
 
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(24px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
+.t-options { display: flex; flex-direction: column; gap: 8px; }
+.t-opt { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border: 1.5px solid #e4e4e0; border-radius: 10px; background: #fff; cursor: pointer; transition: border-color .12s, background .12s; }
+.t-opt:active:not(.tok):not(.tbad) { transform: scale(.99); }
+.t-opts-locked .t-opt { cursor: default; pointer-events: none; }
+.t-opt.tok  { border-color: #1a7a4a; background: rgba(26,122,74,.05); }
+.t-opt.tbad { border-color: #c0392b; background: rgba(192,57,43,.04); }
+.t-opt-letter { width: 26px; height: 26px; flex-shrink: 0; border: 1.5px solid #e4e4e0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: #737373; transition: all .12s; }
+.t-opt.tok  .t-opt-letter { border-color: #1a7a4a; background: #1a7a4a; color: #fff; }
+.t-opt.tbad .t-opt-letter { border-color: #c0392b; background: #c0392b; color: #fff; }
+.t-opt-text { font-size: 14px; font-weight: 400; color: #0e0e0e; flex: 1; line-height: 1.4; }
+.t-opt-mark { font-size: 13px; font-weight: 700; flex-shrink: 0; color: #1a7a4a; }
+.t-opt.tbad .t-opt-mark { color: #c0392b; }
 
-  .card-header {
-    padding: 20px 20px 0;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
+.t-expl { margin-top: 14px; padding: 13px 15px; border-radius: 10px; font-size: 13px; line-height: 1.65; color: #737373; border-left: 2px solid #1a7a4a; background: rgba(26,122,74,.04); }
+.t-expl.wrong { border-left-color: #c0392b; background: rgba(192,57,43,.03); }
+.t-expl strong { color: #0e0e0e; font-weight: 600; }
 
-  .day-number {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
+.t-stats-hero { background: #fff; border: 1px solid #e4e4e0; border-radius: 16px; padding: 28px 20px; text-align: center; margin-bottom: 16px; }
+.t-stats-pct { font-family: 'Fraunces', serif; font-size: 68px; font-weight: 900; line-height: 1; color: #0e0e0e; margin-bottom: 4px; }
+.t-stats-toeic { display: inline-block; margin: 14px auto 10px; border: 1px solid #e4e4e0; border-radius: 10px; padding: 10px 22px; }
+.t-stats-score-num { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 900; color: #0e0e0e; }
+.t-stats-score-lbl { font-size: 10px; color: #737373; margin-top: 2px; letter-spacing: .4px; }
+.t-stats-level { font-size: 12px; color: #737373; margin-top: 8px; }
+.t-sec-row { background: #fff; border: 1px solid #e4e4e0; border-radius: 12px; margin-bottom: 8px; overflow: hidden; cursor: pointer; }
+.t-sec-row-inner { padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; }
+.t-sec-row-name { font-size: 13px; font-weight: 500; }
+.t-sec-row-sub { font-size: 11px; color: #737373; margin-top: 1px; }
+.t-sec-row-pct { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 900; }
+.t-sec-prog { height: 2px; background: #f8f7f4; }
+.t-sec-prog-fill { height: 100%; transition: width .5s ease; }
+.t-btn-reset { width: 100%; padding: 14px; background: #0e0e0e; color: #fff; border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 16px; transition: opacity .15s; }
+.t-btn-reset:active { opacity: .8; }
+.t-error-box { background: rgba(192,57,43,.07); border: 1px solid rgba(192,57,43,.2); border-radius: 12px; padding: 16px; font-size: 13px; color: #c0392b; line-height: 1.6; }
+.t-error-box button { margin-top: 10px; padding: 9px 18px; background: #0e0e0e; color: #fff; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
 
-  .day-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 28px;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-top: 2px;
-    background: linear-gradient(135deg, var(--text) 60%, var(--muted));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* ══════════════════════════════════════
+   ── DÉFI PANEL ──
+══════════════════════════════════════ */
+#panel-defi {
+  background: #080c14;
+  color: #e8edf5;
+  min-height: calc(100vh - 44px);
+}
+#panel-defi body::before,#panel-defi body::after{display:none;}
 
-  .day-type-badge {
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    flex-shrink: 0;
-  }
-  .badge-normal { background: rgba(74,222,128,0.12); color: var(--accent); }
-  .badge-light  { background: rgba(167,139,250,0.12); color: var(--accent3); }
-  .badge-final  { background: rgba(251,191,36,0.12); color: #fbbf24; }
+#panel-defi header {
+  position: sticky; top: 44px; z-index: 200;
+  background: rgba(8,12,20,0.88);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 20px 12px;
+}
+.d-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.d-app-title { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #4ade80, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.d-prog-wrap { display: flex; align-items: center; gap: 10px; }
+.d-prog-bar { flex: 1; height: 5px; background: #151e2e; border-radius: 99px; overflow: hidden; }
+.d-prog-fill { height: 100%; background: linear-gradient(90deg, #4ade80, #38bdf8); border-radius: 99px; transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+.d-prog-label { font-size: 12px; font-weight: 500; color: #5a6a82; white-space: nowrap; min-width: 40px; text-align: right; }
 
-  /* Sections inside card */
-  .card-body {
-    padding: 16px 20px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+#panel-defi main { position: relative; z-index: 1; padding: 20px 16px 130px; max-width: 480px; margin: 0 auto; }
 
-  .task-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    background: var(--surface2);
-    border-radius: 12px;
-    padding: 12px 14px;
-    border: 1px solid var(--border);
-  }
+.d-week-badge { display: inline-flex; align-items: center; gap: 6px; background: #0f1623; border: 1px solid rgba(255,255,255,0.06); border-radius: 99px; padding: 5px 12px; font-size: 11px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; color: #5a6a82; margin-bottom: 14px; }
+.d-week-badge span { color: #38bdf8; }
+.d-day-card { background: #0f1623; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; overflow: hidden; animation: dslideUp 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes dslideUp{from{opacity:0;transform:translateY(24px) scale(0.98);}to{opacity:1;transform:none;}}
+.d-card-header { padding: 20px 20px 0; display: flex; align-items: flex-start; justify-content: space-between; }
+.d-day-number { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; color: #5a6a82; text-transform: uppercase; }
+.d-day-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; line-height: 1.1; margin-top: 2px; background: linear-gradient(135deg, #e8edf5 60%, #5a6a82); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.d-type-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.4px; flex-shrink: 0; }
+.d-badge-normal { background: rgba(74,222,128,0.12); color: #4ade80; }
+.d-badge-light  { background: rgba(167,139,250,0.12); color: #a78bfa; }
+.d-badge-final  { background: rgba(251,191,36,0.12); color: #fbbf24; }
+.d-card-body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+.d-task-row { display: flex; align-items: flex-start; gap: 12px; background: #151e2e; border-radius: 12px; padding: 12px 14px; border: 1px solid rgba(255,255,255,0.06); }
+.d-task-icon { font-size: 18px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+.d-task-content { flex: 1; min-width: 0; }
+.d-task-label { font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: #5a6a82; margin-bottom: 2px; }
+.d-task-text { font-size: 14px; font-weight: 400; color: #e8edf5; line-height: 1.45; word-break: break-word; }
+.d-task-text a { color: #38bdf8; text-decoration: none; font-weight: 500; }
+.d-words-row { background: rgba(74,222,128,0.05); border-color: rgba(74,222,128,0.15); }
+.d-words-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.d-chip { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.2); color: #4ade80; border-radius: 6px; padding: 4px 10px; font-size: 12px; font-weight: 500; line-height: 1.4; }
+.d-chip-fr { color: #5a6a82; font-weight: 400; }
+.d-light-message { text-align: center; padding: 28px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.d-light-emoji { font-size: 44px; }
+.d-light-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #a78bfa; }
+.d-light-sub { font-size: 14px; color: #5a6a82; line-height: 1.5; }
+.d-final-banner { background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(74,222,128,0.08)); border: 1px solid rgba(251,191,36,0.2); border-radius: 14px; padding: 16px; text-align: center; margin-bottom: 4px; }
+.d-final-banner .trophy { font-size: 40px; margin-bottom: 6px; }
+.d-final-banner p { font-size: 13px; color: #5a6a82; }
+.d-done-state { text-align: center; padding: 40px 20px; }
+.d-done-state .big-emoji { font-size: 64px; margin-bottom: 16px; }
+.d-done-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; margin-bottom: 10px; background: linear-gradient(135deg, #4ade80, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.d-done-sub { font-size: 15px; color: #5a6a82; line-height: 1.6; }
 
-  .task-icon {
-    font-size: 18px;
-    line-height: 1;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  .task-content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .task-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 2px;
-  }
-
-  .task-text {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1.45;
-    word-break: break-word;
-  }
-
-  .task-text a {
-    color: var(--accent2);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  /* Words row */
-  .words-row {
-    background: rgba(74,222,128,0.05);
-    border-color: rgba(74,222,128,0.15);
-  }
-  .words-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 6px;
-  }
-  .chip {
-    background: rgba(74,222,128,0.1);
-    border: 1px solid rgba(74,222,128,0.2);
-    color: var(--accent);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1.4;
-  }
-  .chip-fr {
-    color: var(--muted);
-    font-weight: 400;
-  }
-
-  /* Light day */
-  .light-message {
-    text-align: center;
-    padding: 28px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  .light-emoji { font-size: 44px; }
-  .light-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--accent3);
-  }
-  .light-sub { font-size: 14px; color: var(--muted); line-height: 1.5; }
-
-  /* Final day */
-  .final-banner {
-    background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(74,222,128,0.08));
-    border: 1px solid rgba(251,191,36,0.2);
-    border-radius: 14px;
-    padding: 16px;
-    text-align: center;
-    margin-bottom: 4px;
-  }
-  .final-banner .trophy { font-size: 40px; margin-bottom: 6px; }
-  .final-banner p { font-size: 13px; color: var(--muted); }
-
-  /* Done state */
-  .done-state {
-    text-align: center;
-    padding: 40px 20px;
-  }
-  .done-state .big-emoji { font-size: 64px; margin-bottom: 16px; }
-  .done-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 26px;
-    font-weight: 800;
-    margin-bottom: 10px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .done-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
-
-  /* ── BOTTOM NAV / BUTTON ── */
-  .bottom-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: rgba(8,12,20,0.9);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid var(--border);
-    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .btn-next {
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--accent), #16a34a);
-    color: #03200a;
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: transform 0.15s ease, opacity 0.15s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .btn-next:active { transform: scale(0.97); opacity: 0.9; }
-  .btn-next:disabled {
-    background: var(--surface2);
-    color: var(--muted);
-    cursor: default;
-  }
-
-  .btn-arrow { font-size: 18px; }
-
-  /* Prev button */
-  .nav-row {
-    display: flex;
-    gap: 10px;
-  }
-
-  .btn-prev {
-    width: 52px;
-    flex-shrink: 0;
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: var(--surface);
-    color: var(--muted);
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.15s, border-color 0.15s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn-prev:active { color: var(--text); border-color: var(--text); }
-  .btn-prev:disabled { opacity: 0.3; cursor: default; }
+.d-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; background: rgba(8,12,20,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.06); padding: 14px 20px calc(14px + env(safe-area-inset-bottom)); }
+.d-nav-row { max-width: 480px; margin: 0 auto; display: flex; gap: 10px; }
+.d-btn-next { flex: 1; padding: 16px; border: none; border-radius: 14px; background: linear-gradient(135deg, #4ade80, #16a34a); color: #03200a; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.3px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.15s, opacity 0.15s; }
+.d-btn-next:active { transform: scale(0.97); opacity: 0.9; }
+.d-btn-next:disabled { background: #151e2e; color: #5a6a82; cursor: default; }
+.d-btn-prev { width: 52px; flex-shrink: 0; padding: 16px; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; background: #0f1623; color: #5a6a82; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: color 0.15s, border-color 0.15s; }
+.d-btn-prev:active { color: #e8edf5; border-color: #e8edf5; }
+.d-btn-prev:disabled { opacity: 0.3; cursor: default; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <div class="app-title">Défi Anglais</div>
-    <div class="flag">🇬🇧</div>
+<!-- ── APP SWITCHER ── -->
+<div class="app-switcher">
+  <div class="app-switcher-inner">
+    <button class="app-btn active-toeic" id="sw-toeic" onclick="switchApp('toeic')">TOEIC</button>
+    <button class="app-btn" id="sw-defi" onclick="switchApp('defi')">Défi Anglais</button>
   </div>
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TOEIC PANEL
+══════════════════════════════════════ -->
+<div class="panel visible" id="panel-toeic">
+  <header>
+    <div class="t-hdr-row">
+      <div class="t-logo">TOEIC <span>prep</span></div>
+      <div class="t-xp"><em id="xpNum">0</em> xp</div>
     </div>
-    <div class="progress-label" id="progressLabel">0 / 30</div>
-  </div>
-</header>
+    <div class="t-tabs-wrap">
+      <div class="t-tabs">
+        <button class="t-tab" onclick="tSwitchTab('vocab')">Vocabulaire</button>
+        <button class="t-tab" onclick="tSwitchTab('gram')">Grammaire</button>
+        <button class="t-tab" onclick="tSwitchTab('listen')">Listening</button>
+        <button class="t-tab" onclick="tSwitchTab('read')">Reading</button>
+        <button class="t-tab" onclick="tSwitchTab('stats')">Résultats</button>
+      </div>
+    </div>
+  </header>
+  <main id="t-main"></main>
+</div>
 
-<main id="main"></main>
-
-<div class="bottom-bar">
-  <div class="nav-row">
-    <button class="btn-prev" id="btnPrev" onclick="prevDay()" disabled>←</button>
-    <button class="btn-next" id="btnNext" onclick="nextDay()">
-      Commencer le défi <span class="btn-arrow">→</span>
-    </button>
+<!-- ══════════════════════════════════════
+     DÉFI PANEL
+══════════════════════════════════════ -->
+<div class="panel" id="panel-defi">
+  <header>
+    <div class="d-header-top">
+      <div class="d-app-title">Défi Anglais — 30 Jours</div>
+    </div>
+    <div class="d-prog-wrap">
+      <div class="d-prog-bar"><div class="d-prog-fill" id="dProgFill" style="width:0%"></div></div>
+      <div class="d-prog-label" id="dProgLabel">0 / 30</div>
+    </div>
+  </header>
+  <main id="d-main"></main>
+  <div class="d-bottom-bar">
+    <div class="d-nav-row">
+      <button class="d-btn-prev" id="dBtnPrev" onclick="dPrevDay()" disabled>←</button>
+      <button class="d-btn-next" id="dBtnNext" onclick="dNextDay()">Commencer le défi →</button>
+    </div>
   </div>
 </div>
 
 <script>
-// words format: [english, french]
-const days = [
-  // SEMAINE 1
-  {week:1, type:"normal", phrase:`"I am learning English."`, words:[["learn","apprendre"],["work","travailler"],["try","essayer"],["want","vouloir"],["English","l'anglais"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Daily Routines</a>`},
-  {week:1, type:"normal", phrase:`"I work today."`, words:[["today","aujourd'hui"],["job","travail"],["company","entreprise"],["tired","fatigué"],["day","jour"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — What do you do for work?</a>`},
-  {week:1, type:"normal", phrase:`"It's difficult but I try."`, words:[["difficult","difficile"],["easy","facile"],["try","essayer"],["again","encore"],["better","mieux"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Common English Phrases</a>`},
-  {week:1, type:"normal", phrase:`"I want to improve my English."`, words:[["improve","améliorer"],["speak","parler"],["understand","comprendre"],["learn","apprendre"],["more","plus"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=WMFGnl5BKFM" target="_blank">Mr Duncan — How to Improve Your English</a>`},
-  {week:1, type:"normal", phrase:`"My pronunciation is not good but I learn."`, words:[["sound","son"],["word","mot"],["mouth","bouche"],["accent","accent"],["speak","parler"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — English Pronunciation Basics</a>`},
-  {week:1, type:"normal", phrase:`"I am tired." / "I continue."`, words:[["tired","fatigué"],["energy","énergie"],["continue","continuer"],["rest","se reposer"],["focus","se concentrer"]], duolingo:7, youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Sleep & Rest</a>`},
-  {week:1, type:"light"},
-  // SEMAINE 2
-  {week:2, type:"normal", phrase:`"I learn every day."`, words:[["everyday","quotidien"],["practice","pratiquer"],["habit","habitude"],["progress","progrès"],["goal","objectif"]], duolingo:8, youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Daily Habits</a>`},
-  {week:2, type:"normal", phrase:`"I want to progress."`, words:[["progress","progrès"],["future","futur"],["plan","plan"],["change","changer"],["improve","améliorer"]], duolingo:8, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC Learning English — Making Plans</a>`},
-  {week:2, type:"normal", phrase:`"I understand more."`, words:[["understand","comprendre"],["more","plus"],["less","moins"],["slow","lent"],["fast","rapide"]], duolingo:10, youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Understanding Native Speakers</a>`},
-  {week:2, type:"normal", phrase:`"I try to speak."`, words:[["speak","parler"],["voice","voix"],["sound","son"],["sentence","phrase"],["word","mot"]], duolingo:10, youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Street Interviews</a>`},
-  {week:2, type:"normal", phrase:`"My accent is improving."`, words:[["accent","accent"],["pronunciation","prononciation"],["mouth","bouche"],["sound","son"],["clear","clair"]], duolingo:10, youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — American Accent Training</a>`},
-  {week:2, type:"normal", phrase:"3 phrases libres (ce que tu ressens)", words:[["think","penser"],["feel","ressentir"],["believe","croire"],["know","savoir"],["try","essayer"]], duolingo:12, youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Feelings & Emotions</a>`},
-  {week:2, type:"light"},
-  // SEMAINE 3
-  {week:3, type:"normal", phrase:`"I can speak a little."`, words:[["little","un peu"],["more","plus"],["better","mieux"],["confident","confiant"],["calm","calme"]], duolingo:12, youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Talking About Yourself</a>`},
-  {week:3, type:"normal", phrase:`"I am more confident."`, words:[["confident","confiant"],["courage","courage"],["try","essayer"],["effort","effort"],["success","succès"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Self Confidence</a>`},
-  {week:3, type:"normal", phrase:"3 phrases sur ta vie perso", words:[["story","histoire"],["life","vie"],["work","travail"],["dream","rêve"],["goal","objectif"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Talking About Your Life</a>`},
-  {week:3, type:"normal", phrase:`"I express myself."`, words:[["express","exprimer"],["explain","expliquer"],["describe","décrire"],["talk","parler"],["share","partager"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Expressing Opinions</a>`},
-  {week:3, type:"normal", phrase:`"My English is better."`, words:[["better","meilleur"],["stronger","plus fort"],["stable","stable"],["clear","clair"],["fluent","fluide"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — Speak More Fluently</a>`},
-  {week:3, type:"normal", phrase:"5 phrases libres sur n'importe quel sujet", words:[["connect","connecter"],["understand","comprendre"],["answer","répondre"],["question","question"],["speak","parler"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Communication</a>`},
-  {week:3, type:"light"},
-  // SEMAINE 4
-  {week:4, type:"normal", phrase:`"I speak more easily."`, words:[["easy","facile"],["flow","fluidité"],["natural","naturel"],["smooth","fluide"],["calm","calme"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Natural Conversations</a>`},
-  {week:4, type:"normal", phrase:`"I understand conversations."`, words:[["conversation","conversation"],["discussion","discussion"],["talk","discuter"],["exchange","échange"],["share","partager"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Real Conversations</a>`},
-  {week:4, type:"normal", phrase:"5 phrases : donne ton avis sur un sujet", words:[["opinion","opinion"],["idea","idée"],["think","penser"],["believe","croire"],["view","point de vue"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Giving Your Opinion</a>`},
-  {week:4, type:"normal", phrase:`"I am not afraid to speak."`, words:[["fear","peur"],["courage","courage"],["confidence","confiance"],["calm","calme"],["control","contrôle"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Overcoming Fear of Speaking</a>`},
-  {week:4, type:"normal", phrase:`"My English is clearer."`, words:[["clear","clair"],["clean","propre"],["sound","son"],["voice","voix"],["word","mot"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — Clear Pronunciation</a>`},
-  {week:4, type:"normal", phrase:"5 phrases personnelles détaillées", words:[["fluent","courant"],["smooth","fluide"],["natural","naturel"],["stable","stable"],["strong","fort"]], duolingo:25, youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Language Fluency</a>`},
-  {week:4, type:"normal", phrase:"Mini monologue de 2 minutes", words:[["story","histoire"],["explain","expliquer"],["describe","décrire"],["detail","détail"],["example","exemple"]], duolingo:25, youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — How to Tell a Story</a>`},
-  {week:4, type:"normal", phrase:"Mini discours perso — parle librement 3 min", words:[], duolingo:30, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC Learning English — Révision générale</a>`},
-  {week:4, type:"final"}
+// ═══════════════════════════════════════════════════════
+// APP SWITCHER
+// ═══════════════════════════════════════════════════════
+let currentApp = 'toeic';
+
+function switchApp(app) {
+  currentApp = app;
+  document.getElementById('panel-toeic').classList.toggle('visible', app === 'toeic');
+  document.getElementById('panel-defi').classList.toggle('visible', app === 'defi');
+  document.getElementById('sw-toeic').className = 'app-btn' + (app === 'toeic' ? ' active-toeic' : '');
+  document.getElementById('sw-defi').className  = 'app-btn' + (app === 'defi'  ? ' active-defi'  : '');
+  if (app === 'defi') dRender();
+}
+
+// ═══════════════════════════════════════════════════════
+// ── TOEIC LOGIC ──
+// ═══════════════════════════════════════════════════════
+const BATCH = 8;
+
+const PROMPTS = {
+  vocab: {
+    label:'Vocabulaire', sub:'Business English — mots fréquents',
+    system:`Tu es un expert du TOEIC. Génère exactement ${BATCH} questions QCM de vocabulaire business en anglais, niveau intermédiaire (500–700), jamais les mêmes. Chaque question a un mot ou expression à trou. Réponds UNIQUEMENT avec un tableau JSON valide, sans texte autour, sans backticks. Format :
+[{"q":"The company will ___ its operations next year.","opts":["expand","explain","expose","explore"],"ans":0,"exp":"<strong>Expand</strong> = développer/étendre."}]
+Règles : ans = index (0–3) · exp = explication courte en français avec le mot en <strong> · thèmes variés : RH, finance, management, logistique, marketing, droit, IT · mots différents à chaque appel.`
+  },
+  gram: {
+    label:'Grammaire', sub:'Structures clés — Parties 5 & 6',
+    system:`Tu es un expert du TOEIC. Génère exactement ${BATCH} questions QCM de grammaire anglaise, niveau intermédiaire (500–700), jamais les mêmes. Réponds UNIQUEMENT avec un tableau JSON valide, sans texte autour, sans backticks. Format :
+[{"q":"She ___ here since 2019.","opts":["has worked","is working","works","worked"],"ans":0,"exp":"<strong>Has worked</strong> = présent parfait avec <em>since</em>."}]
+Règles : ans = index (0–3) · exp en français · sujets variés : temps, passif, relatifs, conditionnels, gérondifs, comparatifs, conjonctions, prépositions.`
+  },
+  listen: {
+    label:'Listening', sub:'Compréhension orale — Parties 1 à 4',
+    system:`Tu es un expert du TOEIC. Génère exactement ${BATCH} exercices de listening avec un texte audio court et une question. Réponds UNIQUEMENT avec un tableau JSON valide, sans texte autour, sans backticks. Format :
+[{"audio":"Good morning. The office will be closed on Friday.","context":"Annonce interne","q":"Why will the office be closed?","opts":["Public holiday","Staff training","Renovation","Bad weather"],"ans":0,"exp":"<em>\"Due to a public holiday\"</em> = en raison d'un jour férié."}]
+Règles : ans = index (0–3) · audio = texte anglais naturel 2–5 phrases · contextes variés : avion, banque, magasin, voicemail, réunion, gare, hôtel, livraison, médecin, IT.`
+  },
+  read: {
+    label:'Reading', sub:'Textes professionnels — Partie 7',
+    system:`Tu es un expert du TOEIC. Génère exactement ${BATCH} exercices de reading avec un court texte pro et une question. Réponds UNIQUEMENT avec un tableau JSON valide, sans texte autour, sans backticks. Format :
+[{"passage":"<strong>Subject: Office Closure</strong><br><br>The office will be closed on <strong>Friday 24th</strong>.","q":"When will the office be closed?","opts":["Friday 24th","Monday 27th","Thursday 23rd","Saturday 25th"],"ans":0,"exp":"<em>\"The office will be closed on Friday 24th\"</em>"}]
+Règles : ans = index (0–3) · passage HTML avec <strong> · types variés : email, mémo, offre d'emploi, notice, newsletter, contrat.`
+  }
+};
+
+const TKEYS = ['vocab','gram','listen','read'];
+let tCurrentTab = 'vocab';
+let xp = 0;
+let isSpeaking = false;
+let scriptRevealed = {};
+
+const tState = {};
+TKEYS.forEach(k => {
+  tState[k] = { queue:[], loading:false, error:null, idx:0, correct:0, wrong:0, answered:false, current:null, chosenOpt:null };
+});
+
+async function tFetchBatch(k) {
+  const s = tState[k];
+  if (s.loading) return;
+  s.loading = true;
+  const hint = `Appel #${Math.floor(Math.random()*99999)} — génère des questions TOTALEMENT différentes des précédentes, thèmes et mots variés.`;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:PROMPTS[k].system, messages:[{role:'user',content:hint}] })
+    });
+    const data = await res.json();
+    const raw = data.content?.map(b => b.text||'').join('').trim();
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    if (!Array.isArray(parsed)||parsed.length===0) throw new Error('empty');
+    s.queue.push(...parsed);
+    s.error = null;
+  } catch(e) {
+    s.error = 'Impossible de charger les questions. Vérifie ta connexion.';
+  } finally {
+    s.loading = false;
+    tRender();
+  }
+}
+
+function tEnsureQueue(k) { const s=tState[k]; if(s.queue.length<3&&!s.loading) tFetchBatch(k); }
+
+function tNextQuestion(k) {
+  const s = tState[k];
+  s.answered = false; s.chosenOpt = null;
+  if (s.queue.length>0) { s.current=s.queue.shift(); tEnsureQueue(k); tRender(); }
+  else if (s.loading) { s.current=null; tRender(); }
+  else { tFetchBatch(k); tRender(); }
+}
+
+function tClickOpt(oi) {
+  if (tCurrentTab==='stats') return;
+  const k=tCurrentTab, s=tState[k];
+  if (s.answered||!s.current) return;
+  s.answered=true; s.chosenOpt=oi;
+  const q=s.current;
+  if(oi===q.ans){s.correct++;xp+=10;}else{s.wrong++;xp+=2;}
+  s.idx++;
+  tRender();
+  setTimeout(()=>{ if(tCurrentTab===k&&tState[k].answered) tNextQuestion(k); }, 1600);
+}
+
+function tSwitchTab(k) {
+  tStopSpeech();
+  tCurrentTab=k;
+  document.querySelectorAll('.t-tab').forEach(t=>t.classList.remove('active'));
+  const map={vocab:0,gram:1,listen:2,read:3,stats:4};
+  document.querySelectorAll('.t-tab')[map[k]]?.classList.add('active');
+  if(k!=='stats'){
+    const s=tState[k];
+    if(!s.current&&!s.loading){ if(s.queue.length>0) tNextQuestion(k); else tFetchBatch(k).then(()=>tNextQuestion(k)); }
+  }
+  tRender();
+}
+
+function tSpeak(text,btnId) {
+  tStopSpeech();
+  if(!window.speechSynthesis){alert('Utilisez Chrome ou Edge.');return;}
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=0.87;isSpeaking=true;
+  const btn=document.getElementById(btnId);
+  if(btn){btn.textContent='Arrêter';btn.classList.add('playing');}
+  u.onend=()=>{isSpeaking=false;if(btn){btn.textContent='Réécouter';btn.classList.remove('playing');}};
+  u.onerror=()=>{isSpeaking=false;};
+  window.speechSynthesis.speak(u);
+}
+function tStopSpeech(){if(window.speechSynthesis)window.speechSynthesis.cancel();isSpeaking=false;}
+function tTogglePlay(text,btnId){
+  if(isSpeaking){tStopSpeech();const btn=document.getElementById(btnId);if(btn){btn.textContent='Réécouter';btn.classList.remove('playing');}}
+  else tSpeak(text,btnId);
+}
+function tRevealScript(text){const el=document.getElementById('tListenScript');if(el){el.innerHTML=text;el.classList.add('shown');}}
+
+function tRender() {
+  const main=document.getElementById('t-main');
+  document.getElementById('xpNum').textContent=xp;
+  if(tCurrentTab==='stats'){tRenderStats(main);return;}
+  const k=tCurrentTab,s=tState[k],sec=PROMPTS[k],done=s.correct+s.wrong;
+
+  const progHTML=`<div class="t-prog-wrap"><div class="t-prog-bar"><div class="t-prog-fill" style="width:${Math.min((s.idx%50)/50*100,100)}%"></div></div><div class="t-prog-lbl">${s.idx} répondues</div></div>`;
+  const msHTML=done>0?`<div class="t-mini-stats">
+    <div class="t-mstat"><div class="t-mstat-val tc-ok">${s.correct}</div><div class="t-mstat-lbl">Correctes</div></div>
+    <div class="t-mstat"><div class="t-mstat-val tc-bad">${s.wrong}</div><div class="t-mstat-lbl">Erreurs</div></div>
+    <div class="t-mstat"><div class="t-mstat-val tc-mid">${Math.round(s.correct/done*100)}%</div><div class="t-mstat-lbl">Réussite</div></div>
+  </div>`:'';
+  const secHTML=`<div class="t-sec-label"><div class="t-sec-kicker">${sec.label}</div><div class="t-sec-name">${sec.sub}</div></div>`;
+
+  if(s.error&&!s.current){
+    main.innerHTML=`${progHTML}${msHTML}${secHTML}<div class="t-error-box">${s.error}<br><button onclick="tRetry('${k}')">Réessayer</button></div>`;
+    return;
+  }
+  if(!s.current){
+    main.innerHTML=`${progHTML}${msHTML}${secHTML}<div class="t-skeleton">
+      <div class="t-skel-line w60" style="margin-bottom:18px"></div>
+      <div class="t-skel-line w90"></div><div class="t-skel-line w80"></div>
+      <div style="margin-top:18px"></div>
+      <div class="t-skel-opt"></div><div class="t-skel-opt"></div><div class="t-skel-opt"></div><div class="t-skel-opt"></div>
+      <div class="t-loading-label">Génération des questions…</div>
+    </div>`;
+    return;
+  }
+
+  const q=s.current,letters=['A','B','C','D'];
+  let listenHTML='';
+  if(k==='listen'){
+    const key=`tl-${s.idx}`;
+    const rev=scriptRevealed[key];
+    listenHTML=`<div class="t-listen-block">
+      <div class="t-listen-script${rev?' shown':''}" id="tListenScript">${rev?q.audio:'Écoute, puis clique sur la bonne réponse.'}</div>
+      <div class="t-listen-row">
+        <button class="t-btn-listen" id="tPlayBtn" onclick="event.stopPropagation();tTogglePlay(${JSON.stringify(q.audio)},'tPlayBtn')">Écouter</button>
+        <span class="t-listen-ctx">${q.context||''}</span>
+        <button class="t-btn-script" onclick="event.stopPropagation();scriptRevealed['${key}']=true;tRevealScript(${JSON.stringify(q.audio)})">Voir le script</button>
+      </div></div>`;
+  }
+  const passHTML=q.passage?`<div class="t-passage">${q.passage}</div>`:'';
+  const optsHTML=(q.opts||[]).map((o,oi)=>{
+    let cls='t-opt',mark='';
+    if(s.answered){
+      if(oi===q.ans){cls+=' tok';mark='<span class="t-opt-mark">✓</span>';}
+      else if(oi===s.chosenOpt&&oi!==q.ans){cls+=' tbad';mark='<span class="t-opt-mark">✗</span>';}
+    }
+    return `<div class="${cls}" onclick="tClickOpt(${oi})"><div class="t-opt-letter">${letters[oi]}</div><div class="t-opt-text">${o}</div>${mark}</div>`;
+  }).join('');
+  const isOk=s.chosenOpt===q.ans;
+  const explHTML=s.answered?`<div class="t-expl${isOk?'':' wrong'}"><strong>${isOk?'Bonne réponse.':'Réponse correcte : '+(q.opts[q.ans]||'')}</strong><br>${q.exp||''}</div>`:'';
+
+  main.innerHTML=`${progHTML}${msHTML}${secHTML}
+    <div class="t-q-card">
+      <div class="t-q-head"><span class="t-q-sname">${sec.label}</span></div>
+      <div class="t-q-body">${listenHTML}${passHTML}<div class="t-q-text">${q.q}</div>
+      <div class="t-options${s.answered?' t-opts-locked':''}">${optsHTML}</div>${explHTML}
+      ${s.answered&&s.loading?'<div style="font-size:11px;color:#b8b8b8;text-align:center;margin-top:10px">Chargement…</div>':''}</div>
+    </div>`;
+}
+
+function tRetry(k){tState[k].error=null;tFetchBatch(k).then(()=>tNextQuestion(k));}
+
+function tRenderStats(main){
+  let tc=0,tw=0;
+  TKEYS.forEach(k=>{tc+=tState[k].correct;tw+=tState[k].wrong;});
+  const done=tc+tw,pct=done>0?Math.round(tc/done*100):0,est=Math.round(200+(pct/100)*590);
+  const lvl=pct>=80?'Niveau B2 / C1 — Excellent':pct>=65?'Niveau B1 / B2 — Bon':pct>=50?'Niveau A2 / B1 — Intermédiaire':'Niveau A1 / A2 — Continue !';
+  main.innerHTML=`<div class="t-stats-hero">
+    <div class="t-sec-kicker" style="margin-bottom:8px">Score global</div>
+    <div class="t-stats-pct">${pct}%</div>
+    <div style="font-size:13px;color:#737373">${done} questions répondues</div>
+    <div class="t-stats-toeic"><div class="t-stats-score-num">${est}</div><div class="t-stats-score-lbl">Score TOEIC estimé / 495</div></div>
+    <div class="t-stats-level">${lvl}</div>
+  </div>
+  <div class="t-mini-stats" style="margin-bottom:16px">
+    <div class="t-mstat"><div class="t-mstat-val tc-ok">${tc}</div><div class="t-mstat-lbl">Correctes</div></div>
+    <div class="t-mstat"><div class="t-mstat-val tc-bad">${tw}</div><div class="t-mstat-lbl">Erreurs</div></div>
+    <div class="t-mstat"><div class="t-mstat-val tc-mid">${done>0?Math.round(tc/done*100):0}%</div><div class="t-mstat-lbl">Réussite</div></div>
+  </div>
+  ${TKEYS.map(k=>{
+    const s=tState[k],d=s.correct+s.wrong,p=d>0?Math.round(s.correct/d*100):0;
+    const col=p>=70?'#1a7a4a':p>=50?'#b8860b':'#c0392b';
+    return `<div class="t-sec-row" onclick="tSwitchTab('${k}')">
+      <div class="t-sec-row-inner"><div><div class="t-sec-row-name">${PROMPTS[k].label}</div><div class="t-sec-row-sub">${d} répondues · ${s.correct} correctes</div></div>
+      <div class="t-sec-row-pct" style="color:${d>0?col:'#b8b8b8'}">${d>0?p+'%':'—'}</div></div>
+      <div class="t-sec-prog"><div class="t-sec-prog-fill" style="width:${p}%;background:${col}"></div></div>
+    </div>`;
+  }).join('')}
+  <button class="t-btn-reset" onclick="tResetAll()">Réinitialiser les scores</button>`;
+}
+
+function tResetAll(){
+  TKEYS.forEach(k=>{const s=tState[k];s.correct=0;s.wrong=0;s.idx=0;s.answered=false;s.chosenOpt=null;});
+  xp=0; tSwitchTab('vocab');
+}
+
+// ═══════════════════════════════════════════════════════
+// ── DÉFI LOGIC ──
+// ═══════════════════════════════════════════════════════
+const dDays = [
+  {week:1,type:'normal',phrase:`"I am learning English."`,words:[['learn','apprendre'],['work','travailler'],['try','essayer'],['want','vouloir'],['English',"l'anglais"]],duolingo:5,youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Daily Routines</a>`},
+  {week:1,type:'normal',phrase:`"I work today."`,words:[['today',"aujourd'hui"],['job','travail'],['company','entreprise'],['tired','fatigué'],['day','jour']],duolingo:5,youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — What do you do for work?</a>`},
+  {week:1,type:'normal',phrase:`"It's difficult but I try."`,words:[['difficult','difficile'],['easy','facile'],['try','essayer'],['again','encore'],['better','mieux']],duolingo:5,youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Common English Phrases</a>`},
+  {week:1,type:'normal',phrase:`"I want to improve my English."`,words:[['improve','améliorer'],['speak','parler'],['understand','comprendre'],['learn','apprendre'],['more','plus']],duolingo:5,youtube:`<a href="https://www.youtube.com/watch?v=WMFGnl5BKFM" target="_blank">Mr Duncan — How to Improve Your English</a>`},
+  {week:1,type:'normal',phrase:`"My pronunciation is not good but I learn."`,words:[['sound','son'],['word','mot'],['mouth','bouche'],['accent','accent'],['speak','parler']],duolingo:5,youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — Pronunciation Basics</a>`},
+  {week:1,type:'normal',phrase:`"I am tired." / "I continue."`,words:[['tired','fatigué'],['energy','énergie'],['continue','continuer'],['rest','se reposer'],['focus','se concentrer']],duolingo:7,youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Sleep & Rest</a>`},
+  {week:1,type:'light'},
+  {week:2,type:'normal',phrase:`"I learn every day."`,words:[['everyday','quotidien'],['practice','pratiquer'],['habit','habitude'],['progress','progrès'],['goal','objectif']],duolingo:8,youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Daily Habits</a>`},
+  {week:2,type:'normal',phrase:`"I want to progress."`,words:[['progress','progrès'],['future','futur'],['plan','plan'],['change','changer'],['improve','améliorer']],duolingo:8,youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC Learning English — Making Plans</a>`},
+  {week:2,type:'normal',phrase:`"I understand more."`,words:[['understand','comprendre'],['more','plus'],['less','moins'],['slow','lent'],['fast','rapide']],duolingo:10,youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Understanding Native Speakers</a>`},
+  {week:2,type:'normal',phrase:`"I try to speak."`,words:[['speak','parler'],['voice','voix'],['sound','son'],['sentence','phrase'],['word','mot']],duolingo:10,youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Street Interviews</a>`},
+  {week:2,type:'normal',phrase:`"My accent is improving."`,words:[['accent','accent'],['pronunciation','prononciation'],['mouth','bouche'],['sound','son'],['clear','clair']],duolingo:10,youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — American Accent Training</a>`},
+  {week:2,type:'normal',phrase:'3 phrases libres (ce que tu ressens)',words:[['think','penser'],['feel','ressentir'],['believe','croire'],['know','savoir'],['try','essayer']],duolingo:12,youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Feelings & Emotions</a>`},
+  {week:2,type:'light'},
+  {week:3,type:'normal',phrase:`"I can speak a little."`,words:[['little','un peu'],['more','plus'],['better','mieux'],['confident','confiant'],['calm','calme']],duolingo:12,youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Talking About Yourself</a>`},
+  {week:3,type:'normal',phrase:`"I am more confident."`,words:[['confident','confiant'],['courage','courage'],['try','essayer'],['effort','effort'],['success','succès']],duolingo:15,youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Self Confidence</a>`},
+  {week:3,type:'normal',phrase:'3 phrases sur ta vie perso',words:[['story','histoire'],['life','vie'],['work','travail'],['dream','rêve'],['goal','objectif']],duolingo:15,youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Talking About Your Life</a>`},
+  {week:3,type:'normal',phrase:`"I express myself."`,words:[['express','exprimer'],['explain','expliquer'],['describe','décrire'],['talk','parler'],['share','partager']],duolingo:15,youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Expressing Opinions</a>`},
+  {week:3,type:'normal',phrase:`"My English is better."`,words:[['better','meilleur'],['stronger','plus fort'],['stable','stable'],['clear','clair'],['fluent','fluide']],duolingo:15,youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — Speak More Fluently</a>`},
+  {week:3,type:'normal',phrase:"5 phrases libres sur n'importe quel sujet",words:[['connect','connecter'],['understand','comprendre'],['answer','répondre'],['question','question'],['speak','parler']],duolingo:15,youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Communication</a>`},
+  {week:3,type:'light'},
+  {week:4,type:'normal',phrase:`"I speak more easily."`,words:[['easy','facile'],['flow','fluidité'],['natural','naturel'],['smooth','fluide'],['calm','calme']],duolingo:20,youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Natural Conversations</a>`},
+  {week:4,type:'normal',phrase:`"I understand conversations."`,words:[['conversation','conversation'],['discussion','discussion'],['talk','discuter'],['exchange','échange'],['share','partager']],duolingo:20,youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Real Conversations</a>`},
+  {week:4,type:'normal',phrase:"5 phrases : donne ton avis sur un sujet",words:[['opinion','opinion'],['idea','idée'],['think','penser'],['believe','croire'],['view','point de vue']],duolingo:20,youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Giving Your Opinion</a>`},
+  {week:4,type:'normal',phrase:`"I am not afraid to speak."`,words:[['fear','peur'],['courage','courage'],['confidence','confiance'],['calm','calme'],['control','contrôle']],duolingo:20,youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Overcoming Fear of Speaking</a>`},
+  {week:4,type:'normal',phrase:`"My English is clearer."`,words:[['clear','clair'],['clean','propre'],['sound','son'],['voice','voix'],['word','mot']],duolingo:20,youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — Clear Pronunciation</a>`},
+  {week:4,type:'normal',phrase:"5 phrases personnelles détaillées",words:[['fluent','courant'],['smooth','fluide'],['natural','naturel'],['stable','stable'],['strong','fort']],duolingo:25,youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Language Fluency</a>`},
+  {week:4,type:'normal',phrase:"Mini monologue de 2 minutes",words:[['story','histoire'],['explain','expliquer'],['describe','décrire'],['detail','détail'],['example','exemple']],duolingo:25,youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — How to Tell a Story</a>`},
+  {week:4,type:'normal',phrase:"Mini discours perso — parle librement 3 min",words:[],duolingo:30,youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC Learning English — Révision générale</a>`},
+  {week:4,type:'final'}
 ];
 
-let day = 0;
+let dDay = 0;
 
-function getWeekLabel(w) {
-  const labels = {1:"Semaine 1", 2:"Semaine 2", 3:"Semaine 3", 4:"Semaine 4"};
-  return labels[w] || "";
-}
+function dWeekLabel(w){ return {1:'Semaine 1',2:'Semaine 2',3:'Semaine 3',4:'Semaine 4'}[w]||''; }
 
-function render() {
-  const main = document.getElementById('main');
-  const btnNext = document.getElementById('btnNext');
-  const btnPrev = document.getElementById('btnPrev');
-  const fill = document.getElementById('progressFill');
-  const label = document.getElementById('progressLabel');
+function dRender(){
+  const main=document.getElementById('d-main');
+  const btnNext=document.getElementById('dBtnNext');
+  const btnPrev=document.getElementById('dBtnPrev');
+  document.getElementById('dProgFill').style.width=Math.round(dDay/30*100)+'%';
+  document.getElementById('dProgLabel').textContent=dDay+' / 30';
+  btnPrev.disabled=dDay===0;
 
-  // Progress
-  const pct = Math.round((day / 30) * 100);
-  fill.style.width = pct + '%';
-  label.textContent = day + ' / 30';
-
-  // Prev button
-  btnPrev.disabled = day === 0;
-
-  if (day >= days.length) {
-    // DONE
-    main.innerHTML = `
-      <div class="done-state">
-        <div class="big-emoji">🏆</div>
-        <div class="done-title">Défi terminé !</div>
-        <p class="done-sub">30 jours d'effort. Tu peux être fier(e) de toi.<br>Continue avec le même système — la régularité est ta super-puissance.</p>
-      </div>`;
-    btnNext.disabled = true;
-    btnNext.innerHTML = 'Défi terminé 🎉';
-    return;
+  if(dDay>=dDays.length){
+    main.innerHTML=`<div class="d-done-state"><div class="big-emoji">🏆</div><div class="d-done-title">Défi terminé !</div><p class="d-done-sub">30 jours d'effort. Tu peux être fier(e) de toi.<br>Continue avec le même système — la régularité est ta super-puissance.</p></div>`;
+    btnNext.disabled=true; btnNext.innerHTML='Défi terminé 🎉'; return;
   }
+  btnNext.disabled=false;
+  const d=dDays[dDay];
 
-  btnNext.disabled = false;
-
-  const d = days[day];
-
-  if (d.type === 'light') {
-    const colors = ['var(--accent3)', 'var(--accent2)', 'var(--accent)'];
-    main.innerHTML = `
-      <div class="week-badge">✦ <span>${getWeekLabel(d.week)}</span> — Jour ${day+1}</div>
-      <div class="day-card">
-        <div class="card-header">
-          <div>
-            <div class="day-number">Jour ${day+1} · 30</div>
-            <div class="day-title">Jour Libre</div>
-          </div>
-          <span class="day-type-badge badge-light">Repos 🧠</span>
-        </div>
-        <div class="light-message">
-          <div class="light-emoji">🌙</div>
-          <div class="light-title">Repos mental</div>
-          <div class="light-sub">Regarde une vidéo qui te plaît.<br>Dis une phrase en anglais.<br>C'est tout — l'habitude compte.</div>
+  if(d.type==='light'){
+    main.innerHTML=`
+      <div class="d-week-badge">✦ <span>${dWeekLabel(d.week)}</span> — Jour ${dDay+1}</div>
+      <div class="d-day-card">
+        <div class="d-card-header"><div><div class="d-day-number">Jour ${dDay+1} · 30</div><div class="d-day-title">Jour Libre</div></div><span class="d-type-badge d-badge-light">Repos</span></div>
+        <div class="d-light-message"><div class="d-light-emoji">🌙</div><div class="d-light-title">Repos mental</div><div class="d-light-sub">Regarde une vidéo qui te plaît.<br>Dis une phrase en anglais.<br>C'est tout — l'habitude compte.</div></div>
+      </div>`;
+    btnNext.innerHTML=`Jour ${dDay+2} →`; return;
+  }
+  if(d.type==='final'){
+    main.innerHTML=`
+      <div class="d-week-badge">✦ <span>Semaine 4</span> — Jour 30</div>
+      <div class="d-day-card">
+        <div class="d-card-header"><div><div class="d-day-number">Jour 30 · 30</div><div class="d-day-title">Final Day</div></div><span class="d-type-badge d-badge-final">Final</span></div>
+        <div class="d-card-body">
+          <div class="d-final-banner"><div class="trophy">🏆</div><p>Tu es arrivé(e) jusqu'ici.<br>C'est une vraie victoire.</p></div>
+          <div class="d-task-row"><div class="d-task-icon">⏱</div><div class="d-task-content"><div class="d-task-label">Duolingo</div><div class="d-task-text">30 minutes</div></div></div>
+          <div class="d-task-row"><div class="d-task-icon">📺</div><div class="d-task-content"><div class="d-task-label">Vidéo</div><div class="d-task-text">Vidéo anglaise libre</div></div></div>
+          <div class="d-task-row"><div class="d-task-icon">🗣</div><div class="d-task-content"><div class="d-task-label">Expression</div><div class="d-task-text">Parler 5 minutes en anglais</div></div></div>
         </div>
       </div>`;
-    btnNext.innerHTML = `Jour ${day+2} <span class="btn-arrow">→</span>`;
-    return;
+    btnNext.innerHTML='Terminer le défi 🎉'; return;
   }
 
-  if (d.type === 'final') {
-    main.innerHTML = `
-      <div class="week-badge">✦ <span>Semaine 4</span> — Jour 30</div>
-      <div class="day-card">
-        <div class="card-header">
-          <div>
-            <div class="day-number">Jour 30 · 30</div>
-            <div class="day-title">Final Day</div>
-          </div>
-          <span class="day-type-badge badge-final">🏆 Final</span>
-        </div>
-        <div class="card-body">
-          <div class="final-banner">
-            <div class="trophy">🏆</div>
-            <p>Tu es arrivé(e) jusqu'ici.<br>C'est une vraie victoire.</p>
-          </div>
-          <div class="task-row">
-            <div class="task-icon">⏱</div>
-            <div class="task-content">
-              <div class="task-label">Duolingo</div>
-              <div class="task-text">30 minutes</div>
-            </div>
-          </div>
-          <div class="task-row">
-            <div class="task-icon">📺</div>
-            <div class="task-content">
-              <div class="task-label">Vidéo</div>
-              <div class="task-text">Vidéo anglaise libre</div>
-            </div>
-          </div>
-          <div class="task-row">
-            <div class="task-icon">🗣</div>
-            <div class="task-content">
-              <div class="task-label">Expression</div>
-              <div class="task-text">Parler 5 minutes en anglais</div>
-            </div>
-          </div>
-          <div class="task-row">
-            <div class="task-icon">🎯</div>
-            <div class="task-content">
-              <div class="task-label">Objectif</div>
-              <div class="task-text">Confiance + Fluidité</div>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    btnNext.innerHTML = `Terminer le défi 🎉`;
-    return;
-  }
-
-  // Normal day
-  const nextLabel = day < 29 ? `Jour ${day+2} <span class="btn-arrow">→</span>` : `Dernier jour 🏆`;
-  const wordsHTML = d.words.length
-    ? `<div class="words-chips">${d.words.map(([en,fr])=>`<span class="chip"><strong>${en}</strong><span class="chip-fr"> = ${fr}</span></span>`).join('')}</div>`
-    : '';
-
-  main.innerHTML = `
-    <div class="week-badge">✦ <span>${getWeekLabel(d.week)}</span> — Jour ${day+1}</div>
-    <div class="day-card">
-      <div class="card-header">
-        <div>
-          <div class="day-number">Jour ${day+1} · 30</div>
-          <div class="day-title">Jour ${day+1}</div>
-        </div>
-        <span class="day-type-badge badge-normal">Actif ✓</span>
-      </div>
-      <div class="card-body">
-        <div class="task-row">
-          <div class="task-icon">⏱</div>
-          <div class="task-content">
-            <div class="task-label">Duolingo</div>
-            <div class="task-text">${d.duolingo} minutes</div>
-          </div>
-        </div>
-        <div class="task-row">
-          <div class="task-icon">📺</div>
-          <div class="task-content">
-            <div class="task-label">YouTube</div>
-            <div class="task-text">${d.youtube}</div>
-          </div>
-        </div>
-        <div class="task-row">
-          <div class="task-icon">🗣</div>
-          <div class="task-content">
-            <div class="task-label">Phrase du jour</div>
-            <div class="task-text">${d.phrase}</div>
-          </div>
-        </div>
-        ${d.words.length ? `
-        <div class="task-row words-row">
-          <div class="task-icon">📚</div>
-          <div class="task-content">
-            <div class="task-label">Vocabulaire</div>
-            ${wordsHTML}
-          </div>
-        </div>` : ''}
+  const wordsHTML=d.words.length?`<div class="d-words-chips">${d.words.map(([en,fr])=>`<span class="d-chip"><strong>${en}</strong><span class="d-chip-fr"> = ${fr}</span></span>`).join('')}</div>`:'';
+  main.innerHTML=`
+    <div class="d-week-badge">✦ <span>${dWeekLabel(d.week)}</span> — Jour ${dDay+1}</div>
+    <div class="d-day-card">
+      <div class="d-card-header"><div><div class="d-day-number">Jour ${dDay+1} · 30</div><div class="d-day-title">Jour ${dDay+1}</div></div><span class="d-type-badge d-badge-normal">Actif</span></div>
+      <div class="d-card-body">
+        <div class="d-task-row"><div class="d-task-icon">⏱</div><div class="d-task-content"><div class="d-task-label">Duolingo</div><div class="d-task-text">${d.duolingo} minutes</div></div></div>
+        <div class="d-task-row"><div class="d-task-icon">📺</div><div class="d-task-content"><div class="d-task-label">YouTube</div><div class="d-task-text">${d.youtube}</div></div></div>
+        <div class="d-task-row"><div class="d-task-icon">🗣</div><div class="d-task-content"><div class="d-task-label">Phrase du jour</div><div class="d-task-text">${d.phrase}</div></div></div>
+        ${d.words.length?`<div class="d-task-row d-words-row"><div class="d-task-icon">📚</div><div class="d-task-content"><div class="d-task-label">Vocabulaire</div>${wordsHTML}</div></div>`:''}
       </div>
     </div>`;
-
-  btnNext.innerHTML = nextLabel;
+  btnNext.innerHTML=dDay<28?`Jour ${dDay+2} →`:'Dernier jour →';
 }
 
-function nextDay() { if (day <= days.length) { day++; render(); window.scrollTo({top:0,behavior:'smooth'}); } }
-function prevDay() { if (day > 0) { day--; render(); window.scrollTo({top:0,behavior:'smooth'}); } }
+function dNextDay(){ if(dDay<=dDays.length){dDay++;dRender();document.getElementById('d-main').scrollIntoView({behavior:'smooth'});} }
+function dPrevDay(){ if(dDay>0){dDay--;dRender();document.getElementById('d-main').scrollIntoView({behavior:'smooth'});} }
 
-render();
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+tSwitchTab('vocab');
+dRender();
 </script>
 </body>
 </html>
