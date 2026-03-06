@@ -268,9 +268,14 @@
     border: 1px solid rgba(74,222,128,0.2);
     color: var(--accent);
     border-radius: 6px;
-    padding: 2px 9px;
+    padding: 4px 10px;
     font-size: 12px;
     font-weight: 500;
+    line-height: 1.4;
+  }
+  .chip-fr {
+    color: var(--muted);
+    font-weight: 400;
   }
 
   /* Light day */
@@ -419,40 +424,41 @@
 </div>
 
 <script>
+// words format: [english, french]
 const days = [
   // SEMAINE 1
-  {week:1, type:"normal", phrase:`"I am learning English."`, words:["learn","work","try","want","English"], duolingo:5, youtube:`<a href="https://www.youtube.com/@bbclearningenglish" target="_blank">BBC Learning English</a>`},
-  {week:1, type:"normal", phrase:`"I work today."`, words:["today","job","company","tired","day"], duolingo:5, youtube:`<a href="https://www.youtube.com/@EasyEnglish" target="_blank">Easy English</a>`},
-  {week:1, type:"normal", phrase:`"It's difficult but I try."`, words:["difficult","easy","try","again","better"], duolingo:5, youtube:`<a href="https://www.youtube.com/@EnglishAddict" target="_blank">English Addict</a>`},
-  {week:1, type:"normal", phrase:`"I want to improve my English."`, words:["improve","speak","understand","learn","more"], duolingo:5, youtube:`<a href="https://www.youtube.com/@SpeakEnglishWithMrDuncan" target="_blank">MrDuncan</a>`},
-  {week:1, type:"normal", phrase:`"My pronunciation is not good but I learn."`, words:["sound","word","mouth","accent","speak"], duolingo:5, youtube:`<a href="https://www.youtube.com/@rachelsenglish" target="_blank">Rachel's English</a>`},
-  {week:1, type:"normal", phrase:`"I am tired." / "I continue."`, words:["tired","energy","continue","rest","focus"], duolingo:7, youtube:"BBC Learning English"},
+  {week:1, type:"normal", phrase:`"I am learning English."`, words:[["learn","apprendre"],["work","travailler"],["try","essayer"],["want","vouloir"],["English","l'anglais"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Daily Routines</a>`},
+  {week:1, type:"normal", phrase:`"I work today."`, words:[["today","aujourd'hui"],["job","travail"],["company","entreprise"],["tired","fatigué"],["day","jour"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — What do you do for work?</a>`},
+  {week:1, type:"normal", phrase:`"It's difficult but I try."`, words:[["difficult","difficile"],["easy","facile"],["try","essayer"],["again","encore"],["better","mieux"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Common English Phrases</a>`},
+  {week:1, type:"normal", phrase:`"I want to improve my English."`, words:[["improve","améliorer"],["speak","parler"],["understand","comprendre"],["learn","apprendre"],["more","plus"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=WMFGnl5BKFM" target="_blank">Mr Duncan — How to Improve Your English</a>`},
+  {week:1, type:"normal", phrase:`"My pronunciation is not good but I learn."`, words:[["sound","son"],["word","mot"],["mouth","bouche"],["accent","accent"],["speak","parler"]], duolingo:5, youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — English Pronunciation Basics</a>`},
+  {week:1, type:"normal", phrase:`"I am tired." / "I continue."`, words:[["tired","fatigué"],["energy","énergie"],["continue","continuer"],["rest","se reposer"],["focus","se concentrer"]], duolingo:7, youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Sleep & Rest</a>`},
   {week:1, type:"light"},
   // SEMAINE 2
-  {week:2, type:"normal", phrase:`"I learn every day."`, words:["everyday","practice","habit","progress","goal"], duolingo:8, youtube:"Easy English"},
-  {week:2, type:"normal", phrase:`"I want to progress."`, words:["progress","future","plan","change","improve"], duolingo:8, youtube:"BBC Learning English"},
-  {week:2, type:"normal", phrase:`"I understand more."`, words:["understand","more","less","slow","fast"], duolingo:10, youtube:"English Addict"},
-  {week:2, type:"normal", phrase:`"I try to speak."`, words:["speak","voice","sound","sentence","word"], duolingo:10, youtube:"Easy English"},
-  {week:2, type:"normal", phrase:`"My accent is improving."`, words:["accent","pronunciation","mouth","sound","clear"], duolingo:10, youtube:"Rachel's English"},
-  {week:2, type:"normal", phrase:"3 phrases libres", words:["think","feel","believe","know","try"], duolingo:12, youtube:"BBC Learning English"},
+  {week:2, type:"normal", phrase:`"I learn every day."`, words:[["everyday","quotidien"],["practice","pratiquer"],["habit","habitude"],["progress","progrès"],["goal","objectif"]], duolingo:8, youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Daily Habits</a>`},
+  {week:2, type:"normal", phrase:`"I want to progress."`, words:[["progress","progrès"],["future","futur"],["plan","plan"],["change","changer"],["improve","améliorer"]], duolingo:8, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC Learning English — Making Plans</a>`},
+  {week:2, type:"normal", phrase:`"I understand more."`, words:[["understand","comprendre"],["more","plus"],["less","moins"],["slow","lent"],["fast","rapide"]], duolingo:10, youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Understanding Native Speakers</a>`},
+  {week:2, type:"normal", phrase:`"I try to speak."`, words:[["speak","parler"],["voice","voix"],["sound","son"],["sentence","phrase"],["word","mot"]], duolingo:10, youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Street Interviews</a>`},
+  {week:2, type:"normal", phrase:`"My accent is improving."`, words:[["accent","accent"],["pronunciation","prononciation"],["mouth","bouche"],["sound","son"],["clear","clair"]], duolingo:10, youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — American Accent Training</a>`},
+  {week:2, type:"normal", phrase:"3 phrases libres (ce que tu ressens)", words:[["think","penser"],["feel","ressentir"],["believe","croire"],["know","savoir"],["try","essayer"]], duolingo:12, youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Feelings & Emotions</a>`},
   {week:2, type:"light"},
   // SEMAINE 3
-  {week:3, type:"normal", phrase:`"I can speak a little."`, words:["little","more","better","confident","calm"], duolingo:12, youtube:"Easy English"},
-  {week:3, type:"normal", phrase:`"I am more confident."`, words:["confident","courage","try","effort","success"], duolingo:15, youtube:"BBC Learning English"},
-  {week:3, type:"normal", phrase:"3 phrases perso", words:["story","life","work","dream","goal"], duolingo:15, youtube:"English Addict"},
-  {week:3, type:"normal", phrase:`"I express myself."`, words:["express","explain","describe","talk","share"], duolingo:15, youtube:"Easy English"},
-  {week:3, type:"normal", phrase:`"My English is better."`, words:["better","stronger","stable","clear","fluent"], duolingo:15, youtube:"Rachel's English"},
-  {week:3, type:"normal", phrase:"5 phrases libres", words:["connect","understand","answer","question","speak"], duolingo:15, youtube:"BBC Learning English"},
+  {week:3, type:"normal", phrase:`"I can speak a little."`, words:[["little","un peu"],["more","plus"],["better","mieux"],["confident","confiant"],["calm","calme"]], duolingo:12, youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Talking About Yourself</a>`},
+  {week:3, type:"normal", phrase:`"I am more confident."`, words:[["confident","confiant"],["courage","courage"],["try","essayer"],["effort","effort"],["success","succès"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Self Confidence</a>`},
+  {week:3, type:"normal", phrase:"3 phrases sur ta vie perso", words:[["story","histoire"],["life","vie"],["work","travail"],["dream","rêve"],["goal","objectif"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Talking About Your Life</a>`},
+  {week:3, type:"normal", phrase:`"I express myself."`, words:[["express","exprimer"],["explain","expliquer"],["describe","décrire"],["talk","parler"],["share","partager"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Expressing Opinions</a>`},
+  {week:3, type:"normal", phrase:`"My English is better."`, words:[["better","meilleur"],["stronger","plus fort"],["stable","stable"],["clear","clair"],["fluent","fluide"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — Speak More Fluently</a>`},
+  {week:3, type:"normal", phrase:"5 phrases libres sur n'importe quel sujet", words:[["connect","connecter"],["understand","comprendre"],["answer","répondre"],["question","question"],["speak","parler"]], duolingo:15, youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Communication</a>`},
   {week:3, type:"light"},
   // SEMAINE 4
-  {week:4, type:"normal", phrase:`"I speak more easily."`, words:["easy","flow","natural","smooth","calm"], duolingo:20, youtube:"Easy English"},
-  {week:4, type:"normal", phrase:`"I understand conversations."`, words:["conversation","discussion","talk","exchange","share"], duolingo:20, youtube:"BBC Learning English"},
-  {week:4, type:"normal", phrase:"5 phrases perso", words:["opinion","idea","think","believe","view"], duolingo:20, youtube:"English Addict"},
-  {week:4, type:"normal", phrase:`"I am not afraid to speak."`, words:["fear","courage","confidence","calm","control"], duolingo:20, youtube:"Easy English"},
-  {week:4, type:"normal", phrase:`"My English is clearer."`, words:["clear","clean","sound","voice","word"], duolingo:20, youtube:"Rachel's English"},
-  {week:4, type:"normal", phrase:"5 phrases perso", words:["fluent","smooth","natural","stable","strong"], duolingo:25, youtube:"BBC Learning English"},
-  {week:4, type:"normal", phrase:"Mini monologue 2 min", words:["story","explain","describe","detail","example"], duolingo:25, youtube:"Easy English"},
-  {week:4, type:"normal", phrase:"Mini discours perso", words:[], duolingo:30, youtube:"Vidéo libre — Révision générale"},
+  {week:4, type:"normal", phrase:`"I speak more easily."`, words:[["easy","facile"],["flow","fluidité"],["natural","naturel"],["smooth","fluide"],["calm","calme"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — Natural Conversations</a>`},
+  {week:4, type:"normal", phrase:`"I understand conversations."`, words:[["conversation","conversation"],["discussion","discussion"],["talk","discuter"],["exchange","échange"],["share","partager"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC: 6 Minute English — Real Conversations</a>`},
+  {week:4, type:"normal", phrase:"5 phrases : donne ton avis sur un sujet", words:[["opinion","opinion"],["idea","idée"],["think","penser"],["believe","croire"],["view","point de vue"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=VqckOEcbfpo" target="_blank">English Addict — Giving Your Opinion</a>`},
+  {week:4, type:"normal", phrase:`"I am not afraid to speak."`, words:[["fear","peur"],["courage","courage"],["confidence","confiance"],["calm","calme"],["control","contrôle"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=2WzSUqbM9fI" target="_blank">Easy English — Overcoming Fear of Speaking</a>`},
+  {week:4, type:"normal", phrase:`"My English is clearer."`, words:[["clear","clair"],["clean","propre"],["sound","son"],["voice","voix"],["word","mot"]], duolingo:20, youtube:`<a href="https://www.youtube.com/watch?v=n4NVPg2kHv4" target="_blank">Rachel's English — Clear Pronunciation</a>`},
+  {week:4, type:"normal", phrase:"5 phrases personnelles détaillées", words:[["fluent","courant"],["smooth","fluide"],["natural","naturel"],["stable","stable"],["strong","fort"]], duolingo:25, youtube:`<a href="https://www.youtube.com/watch?v=iSaEQwHbZpY" target="_blank">BBC: 6 Minute English — Language Fluency</a>`},
+  {week:4, type:"normal", phrase:"Mini monologue de 2 minutes", words:[["story","histoire"],["explain","expliquer"],["describe","décrire"],["detail","détail"],["example","exemple"]], duolingo:25, youtube:`<a href="https://www.youtube.com/watch?v=FMTCZg3HxL0" target="_blank">Easy English — How to Tell a Story</a>`},
+  {week:4, type:"normal", phrase:"Mini discours perso — parle librement 3 min", words:[], duolingo:30, youtube:`<a href="https://www.youtube.com/watch?v=8dO5E3UOiBs" target="_blank">BBC Learning English — Révision générale</a>`},
   {week:4, type:"final"}
 ];
 
@@ -570,7 +576,7 @@ function render() {
   // Normal day
   const nextLabel = day < 29 ? `Jour ${day+2} <span class="btn-arrow">→</span>` : `Dernier jour 🏆`;
   const wordsHTML = d.words.length
-    ? `<div class="words-chips">${d.words.map(w=>`<span class="chip">${w}</span>`).join('')}</div>`
+    ? `<div class="words-chips">${d.words.map(([en,fr])=>`<span class="chip"><strong>${en}</strong><span class="chip-fr"> = ${fr}</span></span>`).join('')}</div>`
     : '';
 
   main.innerHTML = `
