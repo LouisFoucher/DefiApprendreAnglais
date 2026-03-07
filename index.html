@@ -1121,14 +1121,23 @@ function tRender(){
 
 function tRenderStats(main){
   let tc=0,tw=0;TKEYS.forEach(k=>{tc+=tS[k].correct;tw+=tS[k].wrong;});
-  const done=tc+tw,pct=done>0?Math.round(tc/done*100):0,est=Math.round(200+(pct/100)*590);
-  const lvl=pct>=80?'Niveau B2/C1 — Excellent':pct>=65?'Niveau B1/B2 — Bon':pct>=50?'Niveau A2/B1 — Intermédiaire':'Niveau A1/A2 — Continue !';
+  const done=tc+tw,pct=done>0?Math.round(tc/done*100):0;
+  // Estimation sur 990 points (max TOEIC Listening & Reading)
+  const est=Math.round(pct/100*990);
+  // Niveaux CECRL officiels ETS
+  const lvl=est>=945?'C1 — Expérimenté 🏆':
+            est>=785?'B2 — Avancé ✅':
+            est>=550?'B1 — Intermédiaire 📈':
+            est>=225?'A2 — Élémentaire 📚':
+            est>=120?'A1 — Débutant 🌱':
+            '< A1 — Continue ! 💪';
+  const lvlColor=est>=945?'#1a7a4a':est>=785?'#2563eb':est>=550?'#b8860b':est>=225?'#c0392b':'#737373';
   main.innerHTML=`<div class="tsh">
     <div class="tsk" style="margin-bottom:8px">Score global</div>
     <div class="tsp">${pct}%</div>
     <div style="font-size:13px;color:#737373">${done} questions répondues</div>
-    <div class="tst"><div class="tstn">${est}</div><div class="tstl">Score TOEIC estimé / 495</div></div>
-    <div class="tslv">${lvl}</div>
+    <div class="tst"><div class="tstn">${est}</div><div class="tstl">Score TOEIC estimé / 990</div></div>
+    <div class="tslv" style="color:${lvlColor}">${lvl}</div>
   </div>
   <div class="tms" style="margin-bottom:16px">
     <div class="tm"><div class="tmv cok">${tc}</div><div class="tml">Correctes</div></div>
