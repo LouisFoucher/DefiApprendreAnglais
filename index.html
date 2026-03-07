@@ -142,7 +142,6 @@ body{font-family:'DM Sans',sans-serif;height:100vh;overflow:hidden;}
 .dbpv:active{color:#e8edf5;border-color:#e8edf5;}
 .dbpv:disabled{opacity:.3;cursor:default;}
 </style>
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
 </head>
 <body>
 
@@ -1007,33 +1006,47 @@ function tClickOpt(dispIdx){
 }
 
 function tUpdateBtn(btnId,label,playing){
-  const b=document.getElementById(btnId);
+  var b=document.getElementById(btnId);
   if(b){b.textContent=label;playing?b.classList.add('playing'):b.classList.remove('playing');}
+}
+var tts_chunks=[], tts_idx=0;
+function tts_next(){
+  if(tts_idx>=tts_chunks.length){
+    isSpeaking=false;
+    var b=document.getElementById('tbpl');
+    if(b){b.textContent='Réécouter';b.classList.remove('playing');}
+    return;
+  }
+  var u=new SpeechSynthesisUtterance(tts_chunks[tts_idx++]);
+  u.lang='en-GB'; u.rate=0.85; u.pitch=1; u.volume=1;
+  u.onend=tts_next;
+  u.onerror=function(e){
+    // on Android, error 'interrupted' just means next chunk - ignore it
+    if(e.error==='interrupted'){tts_next();return;}
+    isSpeaking=false;
+    var b=document.getElementById('tbpl');
+    if(b){b.textContent='Réécouter';b.classList.remove('playing');}
+  };
+  window.speechSynthesis.speak(u);
 }
 function tSpeak(text,btnId){
   tStopSpeech();
+  if(!window.speechSynthesis){alert('TTS non supporté sur ce navigateur.');return;}
+  // Split into short chunks (Android cuts off after ~200 chars)
+  tts_chunks=[];
+  var parts=text.split(/[.!?]+/).map(function(s){return s.trim();}).filter(function(s){return s.length>0;});
+  if(parts.length===0) parts=[text];
+  tts_chunks=parts;
+  tts_idx=0;
   isSpeaking=true;
   tUpdateBtn(btnId,'Arrêter',true);
-  if(typeof responsiveVoice!=='undefined'){
-    responsiveVoice.speak(text,'UK English Female',{
-      rate:0.9,
-      onend:function(){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);},
-      onerror:function(){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);}
-    });
-  } else {
-    // Fallback: Web Speech API
-    if(!window.speechSynthesis){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);return;}
-    var u=new SpeechSynthesisUtterance(text);
-    u.lang='en-GB';u.rate=0.85;
-    u.onend=function(){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);};
-    u.onerror=function(){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);};
-    window.speechSynthesis.speak(u);
-  }
+  // Android needs a tiny delay after cancel before speaking
+  setTimeout(function(){tts_next();},100);
 }
 function tStopSpeech(){
-  if(typeof responsiveVoice!=='undefined') responsiveVoice.cancel();
-  else if(window.speechSynthesis) window.speechSynthesis.cancel();
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
   isSpeaking=false;
+  tts_chunks=[]; tts_idx=0;
 }
 function tTogglePlay(text,btnId){
   if(isSpeaking){tStopSpeech();tUpdateBtn(btnId,'Réécouter',false);}
