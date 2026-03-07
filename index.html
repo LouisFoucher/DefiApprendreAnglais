@@ -142,6 +142,7 @@ body{font-family:'DM Sans',sans-serif;height:100vh;overflow:hidden;}
 .dbpv:active{color:#e8edf5;border-color:#e8edf5;}
 .dbpv:disabled{opacity:.3;cursor:default;}
 </style>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
 </head>
 <body>
 
@@ -180,6 +181,7 @@ body{font-family:'DM Sans',sans-serif;height:100vh;overflow:hidden;}
 </div>
 
 <script>
+
 // ═══════════════════════════════════════
 // APP SWITCHER
 // ═══════════════════════════════════════
@@ -962,6 +964,9 @@ read:[
 // ═══════════════════════════════════════
 const LABELS = {vocab:{l:'Vocabulaire',s:'Business English — mots fréquents'},gram:{l:'Grammaire',s:'Structures clés — Parties 5 & 6'},listen:{l:'Listening',s:'Compréhension orale — Parties 1 à 4'},read:{l:'Reading',s:'Textes professionnels — Partie 7'}};
 const TKEYS=['vocab','gram','listen','read'];
+
+</script>
+<script>
 let tTab_cur='vocab', xp=0, isSpeaking=false, scriptRevealed={};
 const tS={};
 TKEYS.forEach(k=>{
@@ -1007,25 +1012,29 @@ function tUpdateBtn(btnId,label,playing){
 }
 function tSpeak(text,btnId){
   tStopSpeech();
-  if(!window.speechSynthesis){alert('Utilisez Chrome ou Edge.');return;}
-  // Split long text into sentences to avoid browser TTS cut-off bug
-  const sentences=text.split(/[.!?]+\s+/).filter(function(s){return s.trim();})||[text];
-  let i=0;
   isSpeaking=true;
   tUpdateBtn(btnId,'Arrêter',true);
-  function speakNext(){
-    if(!isSpeaking||i>=sentences.length){
-      isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);return;
-    }
-    const u=new SpeechSynthesisUtterance(sentences[i++].trim());
+  if(typeof responsiveVoice!=='undefined'){
+    responsiveVoice.speak(text,'UK English Female',{
+      rate:0.9,
+      onend:function(){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);},
+      onerror:function(){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);}
+    });
+  } else {
+    // Fallback: Web Speech API
+    if(!window.speechSynthesis){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);return;}
+    var u=new SpeechSynthesisUtterance(text);
     u.lang='en-GB';u.rate=0.85;
-    u.onend=speakNext;
-    u.onerror=()=>{isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);};
+    u.onend=function(){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);};
+    u.onerror=function(){isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);};
     window.speechSynthesis.speak(u);
   }
-  speakNext();
 }
-function tStopSpeech(){if(window.speechSynthesis)window.speechSynthesis.cancel();isSpeaking=false;}
+function tStopSpeech(){
+  if(typeof responsiveVoice!=='undefined') responsiveVoice.cancel();
+  else if(window.speechSynthesis) window.speechSynthesis.cancel();
+  isSpeaking=false;
+}
 function tTogglePlay(text,btnId){
   if(isSpeaking){tStopSpeech();tUpdateBtn(btnId,'Réécouter',false);}
   else tSpeak(text,btnId);
@@ -1206,6 +1215,7 @@ function dPrev(){if(dDay>0){dDay--;dRender();document.getElementById('dm').scrol
 // INIT
 tTab('vocab');
 dRender();
+
 </script>
 </body>
 </html>
