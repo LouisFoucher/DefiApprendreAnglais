@@ -18,7 +18,7 @@ body{font-family:'DM Sans',sans-serif;height:100vh;overflow:hidden;}
 
 /* TOEIC */
 #pt{background:#f8f7f4;color:#0e0e0e;}
-.panel.visible#pt{display:flex;flex-direction:column;position:fixed;top:44px;left:0;right:0;bottom:0;overflow:hidden;}
+.panel.visible#pt{display:flex;flex-direction:column;position:fixed;top:44px;left:0;right:0;bottom:0;}
 #pt header{flex-shrink:0;background:rgba(248,247,244,.96);backdrop-filter:blur(16px);border-bottom:1px solid #e4e4e0;}
 .th{max-width:480px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:baseline;justify-content:space-between;}
 .tlogo{font-family:'Fraunces',serif;font-size:18px;font-weight:900;letter-spacing:-.4px;color:#0e0e0e;}
@@ -43,7 +43,7 @@ body{font-family:'DM Sans',sans-serif;height:100vh;overflow:hidden;}
 .tsl{margin-bottom:14px;}
 .tsk{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#737373;margin-bottom:3px;}
 .tsn{font-family:'Fraunces',serif;font-size:20px;font-weight:900;letter-spacing:-.3px;color:#0e0e0e;}
-.tqc{background:#fff;border:1px solid #e4e4e0;border-radius:16px;overflow:hidden;animation:tfu .26s ease;}
+.tqc{background:#fff;border:1px solid #e4e4e0;border-radius:16px;overflow:visible;animation:tfu .26s ease;}
 @keyframes tfu{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 .tqh{padding:13px 18px;border-bottom:1px solid #e4e4e0;display:flex;align-items:center;justify-content:space-between;}
 .tqsn{font-size:10px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:#737373;}
@@ -1009,45 +1009,47 @@ function tUpdateBtn(btnId,label,playing){
   var b=document.getElementById(btnId);
   if(b){b.textContent=label;playing?b.classList.add('playing'):b.classList.remove('playing');}
 }
+
+// TTS via audio element - fonctionne sur Android/iOS sans Web Speech API
+var tts_audio=null;
 var tts_chunks=[], tts_idx=0;
+
+function tts_buildUrl(text){
+  // Google Translate TTS - gratuit, fonctionne partout
+  return 'https://translate.google.com/translate_tts?ie=UTF-8&tl=en-GB&client=tw-ob&q='+encodeURIComponent(text);
+}
+
 function tts_next(){
   if(tts_idx>=tts_chunks.length){
     isSpeaking=false;
-    var b=document.getElementById('tbpl');
-    if(b){b.textContent='Réécouter';b.classList.remove('playing');}
+    tUpdateBtn('tbpl','Réécouter',false);
     return;
   }
-  var u=new SpeechSynthesisUtterance(tts_chunks[tts_idx++]);
-  u.lang='en-GB'; u.rate=0.85; u.pitch=1; u.volume=1;
-  u.onend=tts_next;
-  u.onerror=function(e){
-    // on Android, error 'interrupted' just means next chunk - ignore it
-    if(e.error==='interrupted'){tts_next();return;}
-    isSpeaking=false;
-    var b=document.getElementById('tbpl');
-    if(b){b.textContent='Réécouter';b.classList.remove('playing');}
-  };
-  window.speechSynthesis.speak(u);
+  var chunk=tts_chunks[tts_idx++];
+  if(!tts_audio){tts_audio=new Audio();}
+  tts_audio.src=tts_buildUrl(chunk);
+  tts_audio.onended=tts_next;
+  tts_audio.onerror=tts_next; // si un chunk échoue, passe au suivant
+  tts_audio.play().catch(function(){tts_next();});
 }
+
 function tSpeak(text,btnId){
   tStopSpeech();
-  if(!window.speechSynthesis){alert('TTS non supporté sur ce navigateur.');return;}
-  // Split into short chunks (Android cuts off after ~200 chars)
-  tts_chunks=[];
-  var parts=text.split(/[.!?]+/).map(function(s){return s.trim();}).filter(function(s){return s.length>0;});
-  if(parts.length===0) parts=[text];
-  tts_chunks=parts;
+  // Découpe en phrases courtes (max ~180 chars pour Google TTS)
+  var parts=text.match(/[^.!?]{1,180}[.!?]*/g)||[text];
+  tts_chunks=parts.map(function(s){return s.trim();}).filter(function(s){return s.length>0;});
   tts_idx=0;
   isSpeaking=true;
   tUpdateBtn(btnId,'Arrêter',true);
-  // Android needs a tiny delay after cancel before speaking
-  setTimeout(function(){tts_next();},100);
+  tts_next();
 }
+
 function tStopSpeech(){
-  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  if(tts_audio){tts_audio.pause();tts_audio.src='';}
   isSpeaking=false;
   tts_chunks=[]; tts_idx=0;
 }
+
 function tTogglePlay(text,btnId){
   if(isSpeaking){tStopSpeech();tUpdateBtn(btnId,'Réécouter',false);}
   else tSpeak(text,btnId);
