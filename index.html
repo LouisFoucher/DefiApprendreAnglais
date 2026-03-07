@@ -7,28 +7,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,900;1,300;1,600&family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+body{font-family:'DM Sans',sans-serif;height:100vh;overflow:hidden;}
 .app-switcher{position:sticky;top:0;z-index:300;background:#0e0e0e;}
 .app-switcher-inner{max-width:480px;margin:0 auto;width:100%;display:flex;padding:10px 16px 0;gap:4px;}
 .app-btn{flex:1;padding:10px 12px 12px;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.35);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;}
 .app-btn.active-toeic{color:#f8f7f4;border-bottom-color:#f8f7f4;}
 .app-btn.active-defi{color:#4ade80;border-bottom-color:#4ade80;}
 .panel{display:none;} .panel.visible{display:block;}
+#pd.visible{display:flex;flex-direction:column;position:fixed;top:44px;left:0;right:0;bottom:0;overflow:hidden;}
 
 /* TOEIC */
-#pt{background:#f8f7f4;color:#0e0e0e;min-height:calc(100vh - 44px);}
-#pt header{position:sticky;top:44px;z-index:200;background:rgba(248,247,244,.96);backdrop-filter:blur(16px);border-bottom:1px solid #e4e4e0;}
+#pt{background:#f8f7f4;color:#0e0e0e;}
+.panel.visible#pt{display:flex;flex-direction:column;position:fixed;top:44px;left:0;right:0;bottom:0;overflow:hidden;}
+#pt header{flex-shrink:0;background:rgba(248,247,244,.96);backdrop-filter:blur(16px);border-bottom:1px solid #e4e4e0;}
 .th{max-width:480px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:baseline;justify-content:space-between;}
 .tlogo{font-family:'Fraunces',serif;font-size:18px;font-weight:900;letter-spacing:-.4px;color:#0e0e0e;}
 .tlogo span{font-style:italic;font-weight:300;}
 .txp{font-family:'Fraunces',serif;font-size:14px;font-weight:600;color:#737373;}
 .txp em{font-style:normal;color:#0e0e0e;font-weight:900;}
-.ttw{max-width:480px;margin:0 auto;padding:0 20px;overflow-x:auto;scrollbar-width:none;}
-.ttw::-webkit-scrollbar{display:none;}
+.ttw{max-width:480px;margin:0 auto;padding:0 20px;overflow:hidden;}
+
 .tts{display:flex;padding-top:10px;}
 .tt{padding:8px 14px 10px;font-size:11px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;color:#b8b8b8;border:none;background:none;cursor:pointer;border-bottom:1.5px solid transparent;white-space:nowrap;transition:color .18s,border-color .18s;}
 .tt.active{color:#0e0e0e;border-bottom-color:#0e0e0e;}
-#pt main{max-width:480px;margin:0 auto;padding:22px 20px 40px;}
+#pt main{flex:1;overflow:hidden;max-width:480px;margin:0 auto;padding:22px 20px 40px;width:100%;box-sizing:border-box;}
 .tpw{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
 .tpb{flex:1;height:2px;background:#e4e4e0;border-radius:99px;overflow:hidden;}
 .tpf{height:100%;background:#0e0e0e;border-radius:99px;transition:width .4s ease;}
@@ -89,15 +91,15 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
 .tbr:active{opacity:.8;}
 
 /* DÉFI */
-#pd{background:#080c14;color:#e8edf5;min-height:calc(100vh - 44px);}
-#pd header{position:sticky;top:44px;z-index:200;background:rgba(8,12,20,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:14px 20px 12px;}
+#pd{background:#080c14;color:#e8edf5;}
+#pd header{flex-shrink:0;background:rgba(8,12,20,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:14px 20px 12px;}
 .dht{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .dat{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#4ade80,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .dpw{display:flex;align-items:center;gap:10px;}
 .dpb{flex:1;height:5px;background:#151e2e;border-radius:99px;overflow:hidden;}
 .dpf{height:100%;background:linear-gradient(90deg,#4ade80,#38bdf8);border-radius:99px;transition:width .5s cubic-bezier(.34,1.56,.64,1);}
 .dpl{font-size:12px;font-weight:500;color:#5a6a82;white-space:nowrap;min-width:40px;text-align:right;}
-#pd main{position:relative;z-index:1;padding:20px 16px 130px;max-width:480px;margin:0 auto;}
+#pd main{flex:1;overflow:hidden;padding:20px 16px 100px;max-width:480px;margin:0 auto;width:100%;box-sizing:border-box;}
 .dwb{display:inline-flex;align-items:center;gap:6px;background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:99px;padding:5px 12px;font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:#5a6a82;margin-bottom:14px;}
 .dwb span{color:#38bdf8;}
 .ddc{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:20px;overflow:hidden;animation:dsu .4s cubic-bezier(.34,1.56,.64,1);}
@@ -131,7 +133,7 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
 .dds .be{font-size:64px;margin-bottom:16px;}
 .ddtt{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:10px;background:linear-gradient(135deg,#4ade80,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .ddts{font-size:15px;color:#5a6a82;line-height:1.6;}
-.dbb{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(8,12,20,.92);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);padding:14px 20px calc(14px + env(safe-area-inset-bottom));}
+.dbb{flex-shrink:0;background:rgba(8,12,20,.92);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);padding:14px 20px calc(14px + env(safe-area-inset-bottom));}
 .dnr{max-width:480px;margin:0 auto;display:flex;gap:10px;}
 .dbn2{flex:1;padding:16px;border:none;border-radius:14px;background:linear-gradient(135deg,#4ade80,#16a34a);color:#03200a;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,opacity .15s;}
 .dbn2:active{transform:scale(.97);opacity:.9;}
@@ -168,7 +170,6 @@ body{font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
 <!-- DÉFI -->
 <div class="panel" id="pd">
   <header>
-    <div class="dht"><div class="dat">Défi Anglais — 30 Jours</div></div>
     <div class="dpw"><div class="dpb"><div class="dpf" id="dpf" style="width:0%"></div></div><div class="dpl" id="dpl">0 / 30</div></div>
   </header>
   <main id="dm"></main>
@@ -973,7 +974,7 @@ function tTab(k){
   tStopSpeech(); tTab_cur=k;
   document.querySelectorAll('.tt').forEach(t=>t.classList.remove('active'));
   const m={vocab:0,gram:1,listen:2,read:3,stats:4};
-  document.querySelectorAll('.tt')[m[k]]?.classList.add('active');
+  const _el=document.querySelectorAll('.tt')[m[k]];if(_el)_el.classList.add('active');
   tRender();
 }
 
@@ -992,7 +993,7 @@ function tClickOpt(dispIdx){
   tRender();
   setTimeout(()=>{
     if(tTab_cur===k&&tS[k].answered){
-      s.idx++; s.answered=false; s.chosenOpt=null;
+      tStopSpeech(); s.idx++; s.answered=false; s.chosenOpt=null;
       // reshuffle when we've gone through all
       if(s.idx%s.order.length===0) shuffle(s.order);
       tRender();
@@ -1000,19 +1001,35 @@ function tClickOpt(dispIdx){
   },1600);
 }
 
+function tUpdateBtn(btnId,label,playing){
+  const b=document.getElementById(btnId);
+  if(b){b.textContent=label;playing?b.classList.add('playing'):b.classList.remove('playing');}
+}
 function tSpeak(text,btnId){
   tStopSpeech();
   if(!window.speechSynthesis){alert('Utilisez Chrome ou Edge.');return;}
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='en-GB';u.rate=0.87;isSpeaking=true;
-  const btn=document.getElementById(btnId);
-  if(btn){btn.textContent='Arrêter';btn.classList.add('playing');}
-  u.onend=()=>{isSpeaking=false;if(btn){btn.textContent='Réécouter';btn.classList.remove('playing');}};
-  u.onerror=()=>{isSpeaking=false;};
-  window.speechSynthesis.speak(u);
+  // Split long text into sentences to avoid browser TTS cut-off bug
+  const sentences=text.split(/[.!?]+\s+/).filter(function(s){return s.trim();})||[text];
+  let i=0;
+  isSpeaking=true;
+  tUpdateBtn(btnId,'Arrêter',true);
+  function speakNext(){
+    if(!isSpeaking||i>=sentences.length){
+      isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);return;
+    }
+    const u=new SpeechSynthesisUtterance(sentences[i++].trim());
+    u.lang='en-GB';u.rate=0.85;
+    u.onend=speakNext;
+    u.onerror=()=>{isSpeaking=false;tUpdateBtn(btnId,'Réécouter',false);};
+    window.speechSynthesis.speak(u);
+  }
+  speakNext();
 }
 function tStopSpeech(){if(window.speechSynthesis)window.speechSynthesis.cancel();isSpeaking=false;}
-function tTogglePlay(text,btnId){if(isSpeaking){tStopSpeech();const btn=document.getElementById(btnId);if(btn){btn.textContent='Réécouter';btn.classList.remove('playing');}}else tSpeak(text,btnId);}
+function tTogglePlay(text,btnId){
+  if(isSpeaking){tStopSpeech();tUpdateBtn(btnId,'Réécouter',false);}
+  else tSpeak(text,btnId);
+}
 function tRevealScript(text){const el=document.getElementById('tls');if(el){el.innerHTML=text;el.classList.add('shown');}}
 
 function tRender(){
