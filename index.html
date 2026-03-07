@@ -977,13 +977,18 @@ function tTab(k){
   tRender();
 }
 
-function tClickOpt(oi){
+function tClickOpt(dispIdx){
   if(tTab_cur==='stats')return;
   const k=tTab_cur,s=tS[k];
   if(s.answered)return;
-  s.answered=true; s.chosenOpt=oi;
-  const q=DB[k][s.order[s.idx%s.order.length]];
-  if(oi===q.ans){s.correct++;xp+=10;}else{s.wrong++;xp+=2;}
+  s.answered=true; s.chosenOpt=dispIdx;
+  const qi=s.order[s.idx%s.order.length];
+  const q=DB[k][qi];
+  // map display index back to original option index
+  const qKey=`${k}-${qi}`;
+  const optOrd=s.optOrder&&s.optOrder[qKey]?s.optOrder[qKey]:[0,1,2,3];
+  const origIdx=optOrd[dispIdx];
+  if(origIdx===q.ans){s.correct++;xp+=10;}else{s.wrong++;xp+=2;}
   tRender();
   setTimeout(()=>{
     if(tTab_cur===k&&tS[k].answered){
@@ -1041,10 +1046,25 @@ function tRender(){
       </div></div>`;
   }
   const passH=q.passage?`<div class="tpass">${q.passage}</div>`:'';
-  const optsH=(q.opts||[]).map((o,oi)=>{
+  // Shuffle options deterministically per question (same seed each render)
+  if(!s.optOrder) s.optOrder={};
+  const qKey=`${k}-${qi}`;
+  if(!s.optOrder[qKey]){
+    const arr=[0,1,2,3];
+    for(let i=3;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+    s.optOrder[qKey]=arr;
+  }
+  const optOrd=s.optOrder[qKey];
+  // find which display position holds the correct answer
+  const correctDisplayIdx=optOrd.indexOf(q.ans);
+  const optsH=optOrd.map((origIdx,dispIdx)=>{
+    const o=q.opts[origIdx];
     let cls='top',mark='';
-    if(s.answered){if(oi===q.ans){cls+=' tok';mark='<span class="topm">✓</span>';}else if(oi===s.chosenOpt&&oi!==q.ans){cls+=' tbad';mark='<span class="topm">✗</span>';}}
-    return `<div class="${cls}" onclick="tClickOpt(${oi})"><div class="topl">${letters[oi]}</div><div class="topt">${o}</div>${mark}</div>`;
+    if(s.answered){
+      if(origIdx===q.ans){cls+=' tok';mark='<span class="topm">✓</span>';}
+      else if(dispIdx===s.chosenOpt&&origIdx!==q.ans){cls+=' tbad';mark='<span class="topm">✗</span>';}
+    }
+    return `<div class="${cls}" onclick="tClickOpt(${dispIdx})"><div class="topl">${letters[dispIdx]}</div><div class="topt">${o}</div>${mark}</div>`;
   }).join('');
   const isOk=s.chosenOpt===q.ans;
   const explH=s.answered?`<div class="texpl${isOk?'':' wrong'}"><strong>${isOk?'Bonne réponse.':'Réponse correcte : '+(q.opts[q.ans]||'')}</strong><br>${q.exp||''}</div>`:'';
